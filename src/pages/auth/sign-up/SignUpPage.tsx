@@ -1,10 +1,10 @@
 import type { ChangeEvent } from "react";
-import React, { useState } from "react";
+import { useState } from "react";
 import logo from "../../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import AuthWrapper from "../../../pages/auth/AuthWrapper";
-import { useHttpRequestService } from "../../../service/HttpRequestService";
+import useHttpRequestService from "../../../service/useHttpRequestService";
 import LabeledInput from "../../../components/labeled-input/LabeledInput";
 import Button from "../../../components/button/Button";
 import { ButtonType } from "../../../components/button/StyledButton";
@@ -19,9 +19,8 @@ interface SignUpData {
 }
 const SignUpPage = () => {
   const [data, setData] = useState<Partial<SignUpData>>({});
-  const [error, setError] = useState(false);
-
-  const httpRequestService = useHttpRequestService();
+  const [error, setError] = useState("");
+  const { signUp } = useHttpRequestService();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -31,10 +30,11 @@ const SignUpPage = () => {
     };
   const handleSubmit = async () => {
     const { confirmPassword, ...requestData } = data;
-    httpRequestService
-      .signUp(requestData)
+    signUp(requestData)
       .then(() => navigate("/"))
-      .catch(() => setError(false));
+      .catch((e) => {
+        setError(e.message);
+      });
   };
 
   return (
@@ -50,21 +50,21 @@ const SignUpPage = () => {
               required
               placeholder={"Enter name..."}
               title={t("input-params.name")}
-              error={error}
+              error={error !== ""}
               onChange={handleChange("name")}
             />
             <LabeledInput
               required
               placeholder={"Enter username..."}
               title={t("input-params.username")}
-              error={error}
+              error={error !== ""}
               onChange={handleChange("username")}
             />
             <LabeledInput
               required
               placeholder={"Enter email..."}
               title={t("input-params.email")}
-              error={error}
+              error={error !== ""}
               onChange={handleChange("email")}
             />
             <LabeledInput
@@ -72,7 +72,7 @@ const SignUpPage = () => {
               required
               placeholder={"Enter password..."}
               title={t("input-params.password")}
-              error={error}
+              error={error !== ""}
               onChange={handleChange("password")}
             />
             <LabeledInput
@@ -80,10 +80,11 @@ const SignUpPage = () => {
               required
               placeholder={"Confirm password..."}
               title={t("input-params.confirm-password")}
-              error={error}
+              error={error !== ""}
               onChange={handleChange("confirmPassword")}
             />
           </div>
+          <p className={"error-message"}>{error}</p>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Button
               text={t("buttons.register")}

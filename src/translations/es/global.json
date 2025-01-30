@@ -35,7 +35,12 @@
     "comment": "Escribe tu respuesta"
   },
   "error": {
-    "login": "Lo siento, tu nombre de usuario o contraseña es incorrecto. Por favor, inténtalo de nuevo."
+    "login": "Lo siento, tu nombre de usuario o contraseña es incorrecto. Por favor, inténtalo de nuevo.",
+    "signup": {
+      "conflict": "Este usuario ya esta registrado",
+      "bad-request": "Datos incorrectos, por favor verifica",
+      "error": "Por favor verifica tu conexión"
+    }
   },
   "input-params": {
     "username": "Nombre de usuario",

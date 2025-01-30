@@ -1,7 +1,7 @@
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import SearchResultModal from "./search-result-modal/SearchResultModal";
 import { Author } from "../../service";
-import { useHttpRequestService } from "../../service/HttpRequestService";
+import useHttpRequestService from "../../service/useHttpRequestService";
 import { useTranslation } from "react-i18next";
 import { StyledSearchBarContainer } from "./SearchBarContainer";
 import { StyledSearchBarInput } from "./SearchBarInput";
@@ -9,7 +9,7 @@ import { StyledSearchBarInput } from "./SearchBarInput";
 export const SearchBar = () => {
   const [results, setResults] = useState<Author[]>([]);
   const [query, setQuery] = useState<string>("");
-  const service = useHttpRequestService();
+  const { searchUsers } = useHttpRequestService();
   let debounceTimer: NodeJS.Timeout;
   const { t } = useTranslation();
 
@@ -21,7 +21,7 @@ export const SearchBar = () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(async () => {
       try {
-        setResults(await service.searchUsers(inputQuery, 4, 0));
+        setResults(await searchUsers(inputQuery, 4, 0));
       } catch (error) {
         console.log(error);
       }

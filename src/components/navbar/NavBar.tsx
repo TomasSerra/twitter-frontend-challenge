@@ -11,7 +11,7 @@ import { StyledNavBarContainer } from "./NavBarContainer";
 import { StyledContainer } from "../common/Container";
 import { StyledIconContainer } from "./IconContainer";
 import { StyledNavItemsContainer } from "./navItem/NavItemsContainer";
-import { useHttpRequestService } from "../../service/HttpRequestService";
+import useHttpRequestService from "../../service/useHttpRequestService";
 import { User } from "../../service";
 import ProfileLogoutPrompt from "../profile-logout/ProfileLogoutPrompt";
 
@@ -20,7 +20,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const [tweetModalOpen, setTweetModalOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
-  const service = useHttpRequestService();
+  const { me } = useHttpRequestService();
   const [user, setUser] = useState<User>();
   const { t } = useTranslation();
 
@@ -29,7 +29,7 @@ const NavBar = () => {
   }, []);
 
   const handleGetUser = async () => {
-    return await service.me();
+    return await me();
   };
 
   const handleAvatarClick = () => {

@@ -1,13 +1,29 @@
-import type { PostData, SingInData, SingUpData } from "./index";
+import { useState } from "react";
 import axios from "axios";
 import { S3Service } from "./S3Service";
+import { useTranslation } from "react-i18next";
 import { axiosInstance } from "./axiosInstance";
-import i18next from "i18next";
+import type { PostData, SingInData, SingUpData } from "./index";
 
 const url = process.env.REACT_APP_API_URL || "http://localhost:8081/api";
 
-const httpRequestService = {
-  signUp: async (data: Partial<SingUpData>) => {
+const useHttpRequestService = () => {
+  const { t } = useTranslation();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleError = (error: any) => {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 404) {
+        return [];
+      }
+      setError("Error fetching data");
+      console.error("Error fetching:", error);
+    }
+  };
+
+  const signUp = async (data: Partial<SingUpData>) => {
+    setLoading(true);
     try {
       const res = await axiosInstance.post(`${url}/auth/signup`, data);
       if (res.status === 201) {
@@ -15,45 +31,69 @@ const httpRequestService = {
         return true;
       }
     } catch (e) {
+      handleError(e);
       if (axios.isAxiosError(e)) {
         if (e.response?.status === 409) {
-          throw new Error(i18next.t("error.signup.conflict"));
+          throw new Error(t("error.signup.conflict"));
         }
         if (e.response?.status === 400) {
-          throw new Error(i18next.t("error.signup.bad-request"));
+          throw new Error(t("error.signup.bad-request"));
         }
       }
-      throw new Error(i18next.t("error.signup.error"));
+      throw new Error(t("error.signup.error"));
+    } finally {
+      setLoading(false);
     }
-  },
-  signIn: async (data: SingInData) => {
-    const res = await axiosInstance.post(`${url}/auth/login`, data);
-    if (res.status === 200) {
-      localStorage.setItem("token", `Bearer ${res.data.token}`);
-      return true;
-    }
-  },
-  createPost: async (data: PostData) => {
-    const uploadData = {
-      content: data.content,
-      images: data.images?.map((image) => image.name),
-    };
-    const res = await axiosInstance.post(`${url}/post`, uploadData, {
-      headers: {
-        Authorization: localStorage.getItem("token"),
-      },
-    });
-    if (res.status === 201) {
-      const { upload } = S3Service;
-      for (const imageUrl of res.data.images) {
-        const index: number = res.data.images.indexOf(imageUrl);
-        console.log(imageUrl);
-        await upload(data.images![index], imageUrl);
+  };
+
+  const signIn = async (data: SingInData) => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.post(`${url}/auth/login`, data);
+      if (res.status === 200) {
+        localStorage.setItem("token", `Bearer ${res.data.token}`);
+        return true;
       }
-      return res.data;
+    } catch (e) {
+      handleError(e);
+    } finally {
+      setLoading(false);
     }
-  },
-  getPaginatedPosts: async (limit: number, after: string, query: string) => {
+  };
+
+  const createPost = async (data: PostData) => {
+    setLoading(true);
+    try {
+      const uploadData = {
+        content: data.content,
+        images: data.images?.map((image) => image.name),
+      };
+      const res = await axiosInstance.post(`${url}/post`, uploadData, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
+      if (res.status === 201) {
+        const { upload } = S3Service;
+        for (const imageUrl of res.data.images) {
+          const index: number = res.data.images.indexOf(imageUrl);
+          console.log(imageUrl);
+          await upload(data.images![index], imageUrl);
+        }
+        return res.data;
+      }
+    } catch (e) {
+      handleError(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getPaginatedPosts = async (
+    limit: number,
+    after: string,
+    query: string
+  ) => {
     try {
       const res = await axiosInstance.get(`${url}/post/${query}`, {
         headers: {
@@ -68,10 +108,11 @@ const httpRequestService = {
         return res.data;
       }
     } catch (e) {
-      catchError(e);
+      handleError(e);
     }
-  },
-  getPosts: async (query: string) => {
+  };
+
+  const getPosts = async (query: string) => {
     try {
       const res = await axiosInstance.get(`${url}/post/${query}`, {
         headers: {
@@ -82,10 +123,11 @@ const httpRequestService = {
         return res.data;
       }
     } catch (e) {
-      catchError(e);
+      handleError(e);
     }
-  },
-  getRecommendedUsers: async (limit: number, skip: number) => {
+  };
+
+  const getRecommendedUsers = async (limit: number, skip: number) => {
     try {
       const res = await axiosInstance.get(`${url}/user`, {
         headers: {
@@ -100,10 +142,11 @@ const httpRequestService = {
         return res.data;
       }
     } catch (e) {
-      catchError(e);
+      handleError(e);
     }
-  },
-  me: async () => {
+  };
+
+  const me = async () => {
     const res = await axiosInstance.get(`${url}/user/me`, {
       headers: {
         Authorization: localStorage.getItem("token"),
@@ -112,8 +155,9 @@ const httpRequestService = {
     if (res.status === 200) {
       return res.data.user;
     }
-  },
-  getPostById: async (id: string) => {
+  };
+
+  const getPostById = async (id: string) => {
     const res = await axiosInstance.get(`${url}/post/${id}`, {
       headers: {
         Authorization: localStorage.getItem("token"),
@@ -122,8 +166,9 @@ const httpRequestService = {
     if (res.status === 200) {
       return res.data;
     }
-  },
-  createReaction: async (postId: string, reaction: string) => {
+  };
+
+  const createReaction = async (postId: string, reaction: string) => {
     const res = await axiosInstance.post(
       `${url}/reaction/${postId}`,
       { type: reaction },
@@ -136,8 +181,9 @@ const httpRequestService = {
     if (res.status === 201) {
       return res.data;
     }
-  },
-  deleteReaction: async (reactionId: string) => {
+  };
+
+  const deleteReaction = async (reactionId: string) => {
     const res = await axiosInstance.delete(`${url}/reaction/${reactionId}`, {
       headers: {
         Authorization: localStorage.getItem("token"),
@@ -146,8 +192,9 @@ const httpRequestService = {
     if (res.status === 200) {
       return res.data;
     }
-  },
-  followUser: async (userId: string) => {
+  };
+
+  const followUser = async (userId: string) => {
     const res = await axiosInstance.post(
       `${url}/follow/${userId}`,
       {},
@@ -160,8 +207,9 @@ const httpRequestService = {
     if (res.status === 201) {
       return res.data;
     }
-  },
-  unfollowUser: async (userId: string) => {
+  };
+
+  const unfollowUser = async (userId: string) => {
     const res = await axiosInstance.delete(`${url}/follow/${userId}`, {
       headers: {
         Authorization: localStorage.getItem("token"),
@@ -170,8 +218,9 @@ const httpRequestService = {
     if (res.status === 200) {
       return res.data;
     }
-  },
-  searchUsers: async (username: string, limit: number, skip: number) => {
+  };
+
+  const searchUsers = async (username: string, limit: number, skip: number) => {
     try {
       const cancelToken = axios.CancelToken.source();
 
@@ -192,11 +241,11 @@ const httpRequestService = {
       }
     } catch (error) {
       if (!axios.isCancel(error)) console.log(error);
-      catchError(error);
+      handleError(error);
     }
-  },
+  };
 
-  getProfile: async (id: string) => {
+  const getProfile = async (id: string) => {
     const res = await axiosInstance.get(`${url}/user/profile/${id}`, {
       headers: {
         Authorization: localStorage.getItem("token"),
@@ -205,8 +254,9 @@ const httpRequestService = {
     if (res.status === 200) {
       return res.data;
     }
-  },
-  getPaginatedPostsFromProfile: async (
+  };
+
+  const getPaginatedPostsFromProfile = async (
     limit: number,
     after: string,
     id: string
@@ -226,10 +276,11 @@ const httpRequestService = {
         return res.data;
       }
     } catch (e) {
-      catchError(e);
+      handleError(e);
     }
-  },
-  getPostsFromProfile: async (id: string) => {
+  };
+
+  const getPostsFromProfile = async (id: string) => {
     try {
       const res = await axiosInstance.get(`${url}/post/by_user/${id}`, {
         headers: {
@@ -241,11 +292,11 @@ const httpRequestService = {
         return res.data;
       }
     } catch (e) {
-      catchError(e);
+      handleError(e);
     }
-  },
+  };
 
-  isLogged: async () => {
+  const isLogged = async () => {
     try {
       const res = await axiosInstance.get(`${url}/user/me`, {
         headers: {
@@ -256,9 +307,9 @@ const httpRequestService = {
     } catch (e) {
       return false;
     }
-  },
+  };
 
-  getProfileView: async (id: string) => {
+  const getProfileView = async (id: string) => {
     const res = await axiosInstance.get(`${url}/user/${id}`, {
       headers: {
         Authorization: localStorage.getItem("token"),
@@ -268,9 +319,9 @@ const httpRequestService = {
     if (res.status === 200) {
       return res.data;
     }
-  },
+  };
 
-  deleteProfile: async () => {
+  const deleteProfile = async () => {
     const res = await axiosInstance.delete(`${url}/user/me`, {
       headers: {
         Authorization: localStorage.getItem("token"),
@@ -280,9 +331,9 @@ const httpRequestService = {
     if (res.status === 204) {
       localStorage.removeItem("token");
     }
-  },
+  };
 
-  getChats: async () => {
+  const getChats = async () => {
     try {
       const res = await axiosInstance.get(`${url}/chat`, {
         headers: {
@@ -294,11 +345,11 @@ const httpRequestService = {
         return res.data;
       }
     } catch (e) {
-      catchError(e);
+      handleError(e);
     }
-  },
+  };
 
-  getMutualFollows: async () => {
+  const getMutualFollows = async () => {
     const res = await axiosInstance.get(`${url}/follow/mutual`, {
       headers: {
         Authorization: localStorage.getItem("token"),
@@ -308,9 +359,9 @@ const httpRequestService = {
     if (res.status === 200) {
       return res.data;
     }
-  },
+  };
 
-  createChat: async (id: string) => {
+  const createChat = async (id: string) => {
     const res = await axiosInstance.post(
       `${url}/chat`,
       {
@@ -326,9 +377,9 @@ const httpRequestService = {
     if (res.status === 201) {
       return res.data;
     }
-  },
+  };
 
-  getChat: async (id: string) => {
+  const getChat = async (id: string) => {
     const res = await axiosInstance.get(`${url}/chat/${id}`, {
       headers: {
         Authorization: localStorage.getItem("token"),
@@ -338,17 +389,17 @@ const httpRequestService = {
     if (res.status === 200) {
       return res.data;
     }
-  },
+  };
 
-  deletePost: async (id: string) => {
+  const deletePost = async (id: string) => {
     await axiosInstance.delete(`${url}/post/${id}`, {
       headers: {
         Authorization: localStorage.getItem("token"),
       },
     });
-  },
+  };
 
-  getPaginatedCommentsByPostId: async (
+  const getPaginatedCommentsByPostId = async (
     id: string,
     limit: number,
     after: string
@@ -367,10 +418,11 @@ const httpRequestService = {
         return res.data;
       }
     } catch (e) {
-      catchError(e);
+      handleError(e);
     }
-  },
-  getCommentsByPostId: async (id: string) => {
+  };
+
+  const getCommentsByPostId = async (id: string) => {
     try {
       const res = await axiosInstance.get(`${url}/post/comment/by_post/${id}`, {
         headers: {
@@ -381,27 +433,40 @@ const httpRequestService = {
         return res.data;
       }
     } catch (e) {
-      catchError(e);
+      handleError(e);
     }
-  },
+  };
+
+  return {
+    signUp,
+    signIn,
+    createPost,
+    getPaginatedPosts,
+    getPosts,
+    getRecommendedUsers,
+    me,
+    getPostById,
+    createReaction,
+    deleteReaction,
+    followUser,
+    unfollowUser,
+    searchUsers,
+    getProfile,
+    getPaginatedPostsFromProfile,
+    getPostsFromProfile,
+    isLogged,
+    getProfileView,
+    deleteProfile,
+    getChats,
+    getMutualFollows,
+    createChat,
+    getChat,
+    deletePost,
+    getPaginatedCommentsByPostId,
+    getCommentsByPostId,
+    loading,
+    error,
+  };
 };
 
-const catchError = (error: any) => {
-  if (axios.isAxiosError(error)) {
-    if (error.response?.status === 404) {
-      return [];
-    }
-    console.error("Error fetching:", error);
-  }
-};
-
-const useHttpRequestService = () => {
-  return httpRequestService;
-};
-
-// For class component (remove when unused)
-class HttpService {
-  service = httpRequestService;
-}
-
-export { useHttpRequestService, HttpService };
+export default useHttpRequestService;

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BackArrowIcon } from "../../components/icon/Icon";
 import Button from "../../components/button/Button";
-import {Post, User} from "../../service";
+import { Post, User } from "../../service";
 import AuthorData from "../../components/tweet/user-post-data/AuthorData";
 import ImageContainer from "../../components/tweet/tweet-image/ImageContainer";
 import { useLocation } from "react-router-dom";
-import { useHttpRequestService } from "../../service/HttpRequestService";
+import useHttpRequestService from "../../service/useHttpRequestService";
 import TweetInput from "../../components/tweet-input/TweetInput";
 import ImageInput from "../../components/common/ImageInput";
 import { setLength, updateFeed } from "../../redux/user";
@@ -20,28 +20,27 @@ const CommentPage = () => {
   const [content, setContent] = useState("");
   const [post, setPost] = useState<Post | undefined>(undefined);
   const [images, setImages] = useState<File[]>([]);
-  const [user, setUser] = useState<User>()
+  const [user, setUser] = useState<User>();
   const postId = useLocation().pathname.split("/")[3];
-  const service = useHttpRequestService();
+  const { me, getPosts, getPostById } = useHttpRequestService();
   const { length, query } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   useEffect(() => {
-    handleGetUser().then(r => setUser(r))
+    handleGetUser().then((r) => setUser(r));
   }, []);
 
   const handleGetUser = async () => {
-    return await service.me()
-  }
+    return await me();
+  };
 
   useEffect(() => {
     window.innerWidth > 600 && exit();
   }, []);
 
   useEffect(() => {
-    service
-      .getPostById(postId)
+    getPostById(postId)
       .then((res) => {
         setPost(res);
       })
@@ -58,7 +57,7 @@ const CommentPage = () => {
     setContent("");
     setImages([]);
     dispatch(setLength(length + 1));
-    const posts = await service.getPosts(query);
+    const posts = await getPosts(query);
     dispatch(updateFeed(posts));
     exit();
   };

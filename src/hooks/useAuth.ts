@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { useHttpRequestService } from "../service/HttpRequestService";
+import useHttpRequestService from "../service/useHttpRequestService";
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const service = useHttpRequestService();
+  const { isLogged } = useHttpRequestService();
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const loggedIn = await service.isLogged();
+        const loggedIn = await isLogged();
         setIsAuthenticated(loggedIn);
       } catch (error) {
         setIsAuthenticated(false);

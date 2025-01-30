@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useRef } from "react";
 import { StyledContainer } from "./Container";
 import Action from "../../assets/action.svg";
 

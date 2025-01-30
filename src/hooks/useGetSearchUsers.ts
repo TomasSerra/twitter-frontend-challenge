@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Author } from "../service";
-import { useHttpRequestService } from "../service/HttpRequestService";
+import useHttpRequestService from "../service/useHttpRequestService";
 import { LIMIT } from "../util/Constants";
 
 interface UseGetRecommendationsProps {
@@ -16,7 +16,7 @@ export const useGetSearchUsers = ({
   const [error, setError] = useState(false);
   const [hasMore, setHasMore] = useState(false);
 
-  const service = useHttpRequestService();
+  const { searchUsers } = useHttpRequestService();
 
   useEffect(() => {
     setUsers([]);
@@ -27,7 +27,7 @@ export const useGetSearchUsers = ({
       setLoading(true);
       setError(false);
 
-      service.searchUsers(query, LIMIT, skip).then((res) => {
+      searchUsers(query, LIMIT, skip).then((res) => {
         const updatedUsers = [...users, ...res];
         setUsers(
           updatedUsers

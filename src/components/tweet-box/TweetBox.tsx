@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../button/Button";
 import TweetInput from "../tweet-input/TweetInput";
-import { useHttpRequestService } from "../../service/HttpRequestService";
+import useHttpRequestService from "../../service/useHttpRequestService";
 import { setLength, updateFeed } from "../../redux/user";
 import ImageContainer from "../tweet/tweet-image/ImageContainer";
 import { BackArrowIcon } from "../icon/Icon";
@@ -29,10 +29,9 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
   const { length, query } = useSelector(
     (state: { user: { length: number; query: string } }) => state.user
   );
-  const httpService = useHttpRequestService();
+  const { me, createPost, getPosts } = useHttpRequestService();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const service = useHttpRequestService();
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
@@ -40,7 +39,7 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
   }, []);
 
   const handleGetUser = async () => {
-    return await service.me();
+    return await me();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -49,12 +48,12 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
 
   const handleSubmit = async () => {
     try {
-      await httpService.createPost({ content, images }).then(async (res) => {
+      await createPost({ content, images }).then(async (res) => {
         setContent("");
         setImages([]);
         setImagesPreview([]);
         dispatch(setLength(length + 1));
-        const posts = await httpService.getPosts(query);
+        const posts = await getPosts(query);
         dispatch(updateFeed(posts));
         close && close();
       });

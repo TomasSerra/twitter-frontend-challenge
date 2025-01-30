@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import SuggestionBox from "./components/suggestionBox/SuggestionBox";
 import ContentContainer from "./components/contentContainer/ContentContainer";
 import { updateFeed } from "../../redux/user";
-import { useHttpRequestService } from "../../service/HttpRequestService";
+import useHttpRequestService from "../../service/useHttpRequestService";
 import { SearchBar } from "../../components/search-bar/SearchBar";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -12,11 +12,11 @@ const HomePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const query = useAppSelector((state) => state.user.query);
-  const service = useHttpRequestService();
+  const { getPosts } = useHttpRequestService();
 
   const handleSetUser = async () => {
     try {
-      const data = await service.getPosts(query);
+      const data = await getPosts(query);
       dispatch(updateFeed(data));
     } catch (e) {
       navigate("/sign-in");
