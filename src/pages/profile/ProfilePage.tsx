@@ -37,7 +37,9 @@ const ProfilePage = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    handleGetUser().then((r) => setUser(r));
+    handleGetUser().then((r) => {
+      setUser(r);
+    });
   }, []);
 
   const handleGetUser = async () => {
@@ -100,25 +102,13 @@ const ProfilePage = () => {
   };
 
   const getProfileData = async () => {
-    getProfile(id)
+    getProfileView(id)
       .then((res) => {
-        setProfile(res);
-        setFollowing(
-          res
-            ? res?.followers.some((follower: User) => follower.id === user?.id)
-            : false
-        );
+        console.log("Profile: ", res);
+        setProfile({ ...res.user, private: !res.isPublic });
+        setFollowing(res.isFollowing);
       })
-      .catch(() => {
-        getProfileView(id)
-          .then((res) => {
-            setProfile(res);
-            setFollowing(false);
-          })
-          .catch((error2) => {
-            console.log(error2);
-          });
-      });
+      .catch(() => {});
   };
 
   return (
@@ -154,7 +144,7 @@ const ProfilePage = () => {
               </StyledContainer>
             </StyledContainer>
             <StyledContainer width={"100%"}>
-              {profile.followers ? (
+              {!profile.private ? (
                 <ProfileFeed />
               ) : (
                 <StyledH5>Private account</StyledH5>
