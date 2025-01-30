@@ -21,6 +21,9 @@ export const useGetComments = ({ postId }: UseGetCommentsProps) => {
       setLoading(true);
       setError(false);
       getCommentsByPostId(postId).then((res) => {
+        if (!Array.isArray(res)) {
+          res = [];
+        }
         const updatedPosts = Array.from(new Set([...posts, ...res])).filter(
           (post) => post.parentId === postId
         );
