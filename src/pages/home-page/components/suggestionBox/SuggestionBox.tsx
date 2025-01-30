@@ -23,7 +23,7 @@ const SuggestionBox = () => {
   return (
     <StyledSuggestionBoxContainer>
       <h6>{t("suggestion.who-to-follow")}</h6>
-      {users.length > 0 ? (
+      {users?.length > 0 ? (
         users
           .filter((value, index, array) => {
             return array.indexOf(value) === index;
@@ -31,17 +31,17 @@ const SuggestionBox = () => {
           .slice(0, 5)
           .map((user) => (
             <FollowUserBox
-              key={user.id}
-              id={user.id}
-              name={user.name}
-              username={user.username}
-              profilePicture={user.profilePicture}
+              key={user?.id}
+              id={user?.id}
+              name={user?.name}
+              username={user?.username}
+              profilePicture={user?.profilePicture}
             />
           ))
       ) : (
         <p>{t("suggestion.no-recommendations")}</p>
       )}
-      {users.length > 5 && (
+      {users?.length > 5 && (
         <a href="/recommendations">{t("suggestion.show-more")}</a>
       )}
     </StyledSuggestionBoxContainer>

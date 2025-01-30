@@ -6,7 +6,7 @@ export const S3Service = {
 
     await axios.put(url, blob, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": file.type,
       },
     });
   },

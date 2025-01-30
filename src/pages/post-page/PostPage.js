@@ -34,6 +34,7 @@ class PostPage extends Component {
     this.service
       .getPostById(this.state.postId)
       .then((res) => {
+        console.log(res);
         this.setState({ post: res });
       })
       .catch((e) => {

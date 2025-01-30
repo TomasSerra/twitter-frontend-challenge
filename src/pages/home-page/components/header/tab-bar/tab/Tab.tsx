@@ -5,7 +5,7 @@ import { StyledBlueRow } from "./BlueRow";
 
 const Tab = ({ text, active, onClick }: TabProps) => {
   return (
-    <StyledTabContainer onClick={onClick}>
+    <StyledTabContainer onClick={onClick} style={{ cursor: "pointer" }}>
       <p className={active ? "active" : ""}>{text}</p>
       {active && <StyledBlueRow />}
     </StyledTabContainer>

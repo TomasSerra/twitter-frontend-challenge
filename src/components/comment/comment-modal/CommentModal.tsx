@@ -18,20 +18,20 @@ const CommentModal = ({ post, show, onClose }: CommentModalProps) => {
     <PostModal show={show} onClose={onClose}>
       <StyledContainer gap={"16px"}>
         <AuthorData
-          id={post.authorId}
-          name={post.author.name ?? "Name"}
-          username={post.author.username}
-          createdAt={post.createdAt}
-          profilePicture={post.author.profilePicture}
+          id={post?.authorId}
+          name={post?.author?.name ?? "Name"}
+          username={post?.author?.username}
+          createdAt={post?.createdAt}
+          profilePicture={post?.author?.profilePicture}
         />
         <StyledContainer flexDirection={"row"}>
           <StyledLine />
           <StyledContainer gap={"8px"}>
-            <StyledP primary>{post.content}</StyledP>
-            {post.images && <ImageContainer images={post.images} />}
+            <StyledP primary>{post?.content}</StyledP>
+            {post?.images && <ImageContainer images={post?.images} />}
           </StyledContainer>
         </StyledContainer>
-        <TweetBox parentId={post.id} close={onClose} borderless />
+        <TweetBox parentId={post?.id} close={onClose} borderless />
       </StyledContainer>
     </PostModal>
   );

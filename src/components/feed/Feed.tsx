@@ -13,7 +13,7 @@ const Feed = ({ posts, loading }: FeedProps) => {
   return (
     <StyledContainer width={"100%"} alignItems={"center"}>
       {posts
-        .filter((post, index, self) => {
+        ?.filter((post, index, self) => {
           return self.findIndex((p) => p.id === post.id) === index;
         })
         .map((post: Post) => (

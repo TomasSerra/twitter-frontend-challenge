@@ -5,7 +5,7 @@ export const StyledSpanContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 8px;
-  width: 100%;
+  width: fit-content;
   max-height: 40px;
   height: 100%;
   box-sizing: border-box;

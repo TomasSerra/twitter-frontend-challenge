@@ -30,7 +30,7 @@
     "search": "Search Twitter",
     "tweet": "What's happening?!",
     "send": "Send a new message",
-    "comment" : "Tweet your reply"
+    "comment": "Tweet your reply"
   },
   "error": {
     "login": "Sorry, your username or password was incorrect. Please try again."
@@ -55,7 +55,7 @@
     "logout": "You can always log back in at any time."
   },
   "title": {
-    "login": "Enter your email or username",
+    "login": "Enter your email",
     "register": "Create your account"
   }
 }
