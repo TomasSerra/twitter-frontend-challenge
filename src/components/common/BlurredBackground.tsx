@@ -12,4 +12,6 @@ export const StyledBlurredBackground = styled(StyledContainer)`
   z-index: 5;
   box-sizing: border-box;
   padding: 16px;
+  width: 100vw;
+  height: 100dvh;
 `;

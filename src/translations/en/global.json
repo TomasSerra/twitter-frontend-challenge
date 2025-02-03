@@ -74,6 +74,19 @@
         "success": "Post created",
         "error": "Error creating post, try again"
       }
+    },
+    "login": {
+      "success": "Welcome back!",
+      "bad-request": "Sorry, your username or password was incorrect. Please try again",
+      "not-found": "Sorry, your username or password was incorrect. Please try again",
+      "unauthorized": "You don't have permission",
+      "server-error": "Please check your conection"
+    },
+    "signup": {
+      "success": "Welcome to Twitter!",
+      "conflict": "This user already exists",
+      "bad-request": "Password is not strong enough",
+      "server-error": "Please check your conection"
     }
   }
 }

@@ -20,6 +20,7 @@ const StyledSignInWrapper = styled.div`
     flex-direction: column;
     gap: 8px;
     justify-content: left;
+    padding: 20px 0;
   }
 
   .container {
@@ -43,6 +44,7 @@ const StyledSignInWrapper = styled.div`
     font-weight: 400;
     line-height: 13px;
     letter-spacing: -0.01em;
+    min-height: 13px;
   }
 
   /* Media query for screens larger than the phone size */

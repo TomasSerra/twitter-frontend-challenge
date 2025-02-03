@@ -4,43 +4,46 @@ import { S3Service } from "./S3Service";
 import { useTranslation } from "react-i18next";
 import { axiosInstance } from "./axiosInstance";
 import type { PostData, SingInData, SingUpData } from "./index";
+import { useToast } from "../components/toast/ToastContext";
+import { ToastType } from "../components/toast/Toast";
 
 const url = process.env.REACT_APP_API_URL || "http://localhost:8081/api";
 
 const useHttpRequestService = () => {
+  const { showToast } = useToast();
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleError = (error: any) => {
+  const handleNotFound = (error: any) => {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 404) {
         return [];
       }
-      setError("Error fetching data");
-      console.error("Error fetching:", error);
     }
   };
 
   const signUp = async (data: Partial<SingUpData>) => {
     setLoading(true);
+    setError(null);
     try {
       const res = await axiosInstance.post(`${url}/auth/signup`, data);
       if (res.status === 201) {
         localStorage.setItem("token", `Bearer ${res.data.token}`);
+        showToast(ToastType.SUCCESS, t("toast.signup.success"));
         return true;
       }
     } catch (e) {
-      handleError(e);
       if (axios.isAxiosError(e)) {
         if (e.response?.status === 409) {
-          throw new Error(t("error.signup.conflict"));
+          showToast(ToastType.ALERT, t("toast.signup.conflict"));
+          setError("");
         }
         if (e.response?.status === 400) {
-          throw new Error(t("error.signup.bad-request"));
+          setError(t("toast.signup.bad-request"));
         }
       }
-      throw new Error(t("error.signup.error"));
+      throw new Error(t("toast.signup.error"));
     } finally {
       setLoading(false);
     }
@@ -48,14 +51,35 @@ const useHttpRequestService = () => {
 
   const signIn = async (data: SingInData) => {
     setLoading(true);
+    setError(null);
     try {
       const res = await axiosInstance.post(`${url}/auth/login`, data);
       if (res.status === 200) {
         localStorage.setItem("token", `Bearer ${res.data.token}`);
+        showToast(ToastType.SUCCESS, t("toast.login.success"));
         return true;
       }
     } catch (e) {
-      handleError(e);
+      if (axios.isAxiosError(e)) {
+        switch (e.response?.status) {
+          case 400:
+            setError(t("toast.login.bad-request"));
+            break;
+          case 401:
+            showToast(ToastType.ALERT, t("toast.login.unauthorized"));
+            break;
+          case 404:
+            setError(t("toast.login.not-found"));
+            break;
+          case 500:
+            showToast(ToastType.ALERT, t("toast.login.server-error"));
+            break;
+          default:
+            showToast(ToastType.ALERT, t("toast.login.server-error"));
+            break;
+        }
+      }
+      throw new Error(t("toast.login.server-error"));
     } finally {
       setLoading(false);
     }
@@ -79,7 +103,7 @@ const useHttpRequestService = () => {
         return res.data;
       }
     } catch (e) {
-      handleError(e);
+      handleNotFound(e);
     } finally {
       setLoading(false);
     }
@@ -101,7 +125,7 @@ const useHttpRequestService = () => {
         return res.data;
       }
     } catch (e) {
-      handleError(e);
+      handleNotFound(e);
     }
   };
 
@@ -112,7 +136,7 @@ const useHttpRequestService = () => {
         return res.data;
       }
     } catch (e) {
-      handleError(e);
+      handleNotFound(e);
     }
   };
 
@@ -128,7 +152,7 @@ const useHttpRequestService = () => {
         return res.data;
       }
     } catch (e) {
-      handleError(e);
+      handleNotFound(e);
     }
   };
 
@@ -148,29 +172,33 @@ const useHttpRequestService = () => {
 
   const createReaction = async (postId: string, reaction: string) => {
     const res = await axiosInstance.post(`${url}/reaction/${postId}`, {
-      type: reaction,
+      action: reaction,
     });
     if (res.status === 201) {
       return res.data;
     }
   };
 
-  const deleteReaction = async (reactionId: string) => {
-    const res = await axiosInstance.delete(`${url}/reaction/${reactionId}`);
+  const deleteReaction = async (reactionId: string, reaction: string) => {
+    const res = await axiosInstance.delete(`${url}/reaction/${reactionId}`, {
+      data: {
+        action: reaction,
+      },
+    });
     if (res.status === 200) {
       return res.data;
     }
   };
 
   const followUser = async (userId: string) => {
-    const res = await axiosInstance.post(`${url}/follow/${userId}`);
+    const res = await axiosInstance.post(`${url}/follower/follow/${userId}`);
     if (res.status === 201) {
       return res.data;
     }
   };
 
   const unfollowUser = async (userId: string) => {
-    const res = await axiosInstance.delete(`${url}/follow/${userId}`);
+    const res = await axiosInstance.post(`${url}/follower/unfollow/${userId}`);
     if (res.status === 200) {
       return res.data;
     }
@@ -194,12 +222,12 @@ const useHttpRequestService = () => {
       }
     } catch (error) {
       if (!axios.isCancel(error)) console.log(error);
-      handleError(error);
+      handleNotFound(error);
     }
   };
 
   const getProfile = async (id: string) => {
-    const res = await axiosInstance.get(`${url}/user/profile/${id}`);
+    const res = await axiosInstance.get(`${url}/user/${id}`);
     if (res.status === 200) {
       return res.data;
     }
@@ -222,7 +250,7 @@ const useHttpRequestService = () => {
         return res.data;
       }
     } catch (e) {
-      handleError(e);
+      handleNotFound(e);
     }
   };
 
@@ -234,7 +262,7 @@ const useHttpRequestService = () => {
         return res.data;
       }
     } catch (e) {
-      handleError(e);
+      handleNotFound(e);
     }
   };
 
@@ -271,7 +299,7 @@ const useHttpRequestService = () => {
         return res.data;
       }
     } catch (e) {
-      handleError(e);
+      handleNotFound(e);
     }
   };
 
@@ -321,7 +349,7 @@ const useHttpRequestService = () => {
         return res.data;
       }
     } catch (e) {
-      handleError(e);
+      handleNotFound(e);
     }
   };
 
@@ -332,7 +360,7 @@ const useHttpRequestService = () => {
         return res.data;
       }
     } catch (e) {
-      handleError(e);
+      handleNotFound(e);
     }
   };
 

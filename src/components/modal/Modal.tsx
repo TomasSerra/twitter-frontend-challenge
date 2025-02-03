@@ -40,7 +40,9 @@ const Modal = ({
               >
                 <StyledContainer gap={img ? "8px" : "24px"}>
                   <StyledH5>{title}</StyledH5>
-                  <StyledP primary={false}>{text}</StyledP>
+                  <StyledP primary={false} style={{ margin: 0 }}>
+                    {text}
+                  </StyledP>
                 </StyledContainer>
                 <StyledContainer alignItems={"center"}>
                   {acceptButton}

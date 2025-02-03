@@ -23,13 +23,8 @@ const ProfilePage = () => {
     buttonText: "",
   });
   const { data: me } = useMe();
-  const {
-    deleteProfile,
-    followUser,
-    unfollowUser,
-    getProfileView,
-    getProfile,
-  } = useHttpRequestService();
+  const { deleteProfile, followUser, unfollowUser, getProfileView } =
+    useHttpRequestService();
 
   const id = useParams().id;
   const navigate = useNavigate();
@@ -85,7 +80,7 @@ const ProfilePage = () => {
         });
       } else {
         await followUser(id);
-        getProfile(id).then((res) => setProfile(res));
+        getProfileView(id).then((res) => setProfile(res));
       }
       return await getProfileData();
     }

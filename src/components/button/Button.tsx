@@ -7,8 +7,16 @@ interface ButtonProps {
   buttonType: ButtonType;
   onClick?: MouseEventHandler;
   disabled?: boolean;
+  type?: string;
 }
-const Button = ({ text, size, buttonType, onClick, disabled }: ButtonProps) => {
+const Button = ({
+  text,
+  size,
+  buttonType,
+  onClick,
+  disabled,
+  type,
+}: ButtonProps) => {
   return (
     <StyledButton
       size={size}

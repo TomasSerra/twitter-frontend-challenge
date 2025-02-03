@@ -27,27 +27,25 @@ const Tweet = ({ post }: TweetProps) => {
   const navigate = useNavigate();
   const { data: user } = useMe();
 
-  const getCountByType = (type: string): number => {
-    return actualPost?.reactions?.filter((r) => r.type === type).length ?? 0;
-  };
-
   const handleReaction = async (type: string) => {
-    const reacted = actualPost.reactions.find(
-      (r) => r.type === type && r.userId === user?.id
+    const reacted = actualPost?.reactions?.find(
+      (r) => r.action === type && r.authorId === user?.id
     );
     if (reacted) {
-      await deleteReaction(reacted.id);
+      await deleteReaction(actualPost?.id, type).then(() => {
+        getPostById(actualPost?.id).then((res) => setActualPost(res));
+      });
     } else {
-      await createReaction(actualPost?.id, type);
+      await createReaction(actualPost?.id, type).then(() => {
+        getPostById(actualPost?.id).then((res) => setActualPost(res));
+      });
     }
-    const newPost = await getPostById(post?.id);
-    setActualPost(newPost);
   };
 
   const hasReactedByType = (type: string): boolean => {
-    return actualPost?.reactions?.some(
-      (r) => r.type === type && r.userId === user?.id
-    );
+    return actualPost?.reactions?.some((r) => {
+      return r.action === type && r.authorId === user?.id;
+    });
   };
 
   return (
@@ -94,7 +92,7 @@ const Tweet = ({ post }: TweetProps) => {
       <StyledReactionsContainer>
         <Reaction
           img={IconType.CHAT}
-          count={actualPost?.comments?.length}
+          count={actualPost.qtyComments}
           reactionFunction={() =>
             window.innerWidth > 600
               ? setShowCommentModal(true)
@@ -105,14 +103,14 @@ const Tweet = ({ post }: TweetProps) => {
         />
         <Reaction
           img={IconType.RETWEET}
-          count={getCountByType("RETWEET")}
+          count={actualPost.qtyRetweets}
           reactionFunction={() => handleReaction("RETWEET")}
           increment={1}
           reacted={hasReactedByType("RETWEET")}
         />
         <Reaction
           img={IconType.LIKE}
-          count={getCountByType("LIKE")}
+          count={actualPost.qtyLikes}
           reactionFunction={() => handleReaction("LIKE")}
           increment={1}
           reacted={hasReactedByType("LIKE")}

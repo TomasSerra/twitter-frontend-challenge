@@ -66,6 +66,29 @@
     "register": "Crea tu cuenta"
   },
   "toast": {
-    "logout": "Cerraste Sesión!"
+    "logout": "Cerraste Sesión!",
+    "post": {
+      "delete": {
+        "success": "Post eliminado",
+        "error": "Error al eliminar el post, intenta de nuevo"
+      },
+      "create": {
+        "success": "Post creado",
+        "error": "Error al crear el post, intenta de nuevo"
+      }
+    },
+    "login": {
+      "success": "¡Bienvenido de nuevo!",
+      "bad-request": "Lo siento, tu nombre de usuario o contraseña es incorrecto. Por favor, inténtalo de nuevo",
+      "not-found": "Lo siento, tu nombre de usuario o contraseña es incorrecto. Por favor, inténtalo de nuevo",
+      "unauthorized": "No tienes permiso",
+      "server-error": "Por favor verifica tu conexión"
+    },
+    "signup": {
+      "success": "¡Bienvenido a Twitter!",
+      "conflict": "Este usuario ya esta registrado",
+      "bad-request": "La contraseña no es segura",
+      "server-error": "Por favor verifica tu conexión"
+    }
   }
 }
