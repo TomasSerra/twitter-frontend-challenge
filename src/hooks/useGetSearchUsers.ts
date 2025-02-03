@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Author } from "../service";
 import useHttpRequestService from "../service/useHttpRequestService";
-import { LIMIT } from "../util/Constants";
 
 interface UseGetRecommendationsProps {
   query: string;
@@ -27,7 +26,7 @@ export const useGetSearchUsers = ({
       setLoading(true);
       setError(false);
 
-      searchUsers(query, LIMIT, skip).then((res) => {
+      searchUsers(query).then((res) => {
         const updatedUsers = [...users, ...res];
         setUsers(
           updatedUsers

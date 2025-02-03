@@ -1,10 +1,15 @@
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  HTMLInputTypeAttribute,
+  useRef,
+  useState,
+} from "react";
 import { StyledInputContainer } from "./InputContainer";
 import { StyledInputTitle } from "./InputTitle";
 import { StyledInputElement } from "./StyledInputElement";
 
 interface InputWithLabelProps {
-  type?: "password" | "text";
+  type?: HTMLInputTypeAttribute;
   title: string;
   placeholder: string;
   required: boolean;
@@ -12,7 +17,7 @@ interface InputWithLabelProps {
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   name: string;
-  hasError: boolean;
+  hasError?: boolean;
 }
 
 const LabeledInput = ({

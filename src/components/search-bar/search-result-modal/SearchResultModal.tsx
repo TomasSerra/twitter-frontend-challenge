@@ -2,6 +2,7 @@ import { Author } from "../../../service";
 import UserDataBox from "../../user-data-box/UserDataBox";
 import { StyledContainer } from "../../common/Container";
 import { StyledSearchResultModalContainer } from "./SearchResultModalContainer";
+import { useNavigate } from "react-router-dom";
 
 interface SearchResultModalProps {
   show: boolean;
@@ -11,6 +12,7 @@ export const SearchResultModal = ({
   show,
   results,
 }: SearchResultModalProps) => {
+  const navigate = useNavigate();
   return (
     <>
       {show && (
@@ -25,6 +27,9 @@ export const SearchResultModal = ({
                     name={author?.name}
                     id={author?.id}
                     profilePicture={author?.profilePicture}
+                    onClick={() => {
+                      navigate(`/profile/${author?.id}`);
+                    }}
                   />
                 );
               })}

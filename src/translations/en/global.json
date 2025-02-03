@@ -32,6 +32,21 @@
     "send": "Send a new message",
     "comment": "Tweet your reply"
   },
+  "login": {
+    "required": "This field is required",
+    "email": {
+      "invalid": "Invalid email format"
+    }
+  },
+  "signup": {
+    "required": "This field is required",
+    "email": {
+      "invalid": "Invalid email format"
+    },
+    "password": {
+      "invalid": "Passwords do not match"
+    }
+  },
   "error": {
     "login": "Sorry, your username or password was incorrect. Please try again.",
     "signup": {

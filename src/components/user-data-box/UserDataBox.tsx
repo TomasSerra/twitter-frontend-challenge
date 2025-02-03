@@ -17,15 +17,12 @@ export const UserDataBox = ({
   id,
   onClick,
 }: UserDataBoxProps) => {
-  const navigate = useNavigate();
-
   return (
     <div className="user-container" onClick={onClick}>
       <Avatar
         width={"48px"}
         height={"48px"}
         src={profilePicture ?? icon}
-        onClick={() => onClick ?? navigate(`/profile/${id}`)}
         alt={name ?? "Name"}
       />
       <div className="user-info-container">

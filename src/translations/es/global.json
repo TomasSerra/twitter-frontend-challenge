@@ -34,6 +34,21 @@
     "send": "Envíar un nuevo mensaje",
     "comment": "Escribe tu respuesta"
   },
+  "login": {
+    "required": "Campo requerido",
+    "email": {
+      "invalid": "Formato de email inválido"
+    }
+  },
+  "signup": {
+    "required": "Campo requerido",
+    "email": {
+      "invalid": "Formato de email inválido"
+    },
+    "password": {
+      "invalid": "Las contraseñas no coinciden"
+    }
+  },
   "error": {
     "login": "Lo siento, tu nombre de usuario o contraseña es incorrecto. Por favor, inténtalo de nuevo.",
     "signup": {

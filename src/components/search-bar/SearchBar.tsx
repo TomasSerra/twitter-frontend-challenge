@@ -21,11 +21,15 @@ export const SearchBar = () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(async () => {
       try {
-        setResults(await searchUsers(inputQuery, 4, 0));
+        if (inputQuery.length === 0) {
+          setResults([]);
+          return;
+        }
+        setResults(await searchUsers(inputQuery));
       } catch (error) {
         console.log(error);
       }
-    }, 300);
+    }, 500);
   };
 
   return (

@@ -39,15 +39,15 @@ const SignInPage = () => {
             validate={(values) => {
               const errors: { email?: string; password?: string } = {};
               if (!values.email) {
-                errors.email = "Required";
+                errors.email = t("login.required");
               } else if (
                 !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
               ) {
-                errors.email = "Invalid email format";
+                errors.email = t("login.email.invalid");
               }
 
               if (!values.password) {
-                errors.password = "Required";
+                errors.password = t("login.required");
               }
               return errors;
             }}
@@ -61,6 +61,7 @@ const SignInPage = () => {
                 <div className={"input-container"}>
                   <LabeledInput
                     name="email"
+                    type="email"
                     required
                     placeholder={"Enter user..."}
                     title={t("input-params.email")}

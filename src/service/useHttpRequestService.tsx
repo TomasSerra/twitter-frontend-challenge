@@ -204,18 +204,16 @@ const useHttpRequestService = () => {
     }
   };
 
-  const searchUsers = async (username: string, limit: number, skip: number) => {
+  const searchUsers = async (username: string) => {
     try {
       const cancelToken = axios.CancelToken.source();
 
-      const response = await axiosInstance.get(`${url}/user/search`, {
-        params: {
-          username,
-          limit,
-          skip,
-        },
-        cancelToken: cancelToken.token,
-      });
+      const response = await axiosInstance.get(
+        `${url}/user/by_username/${username}`,
+        {
+          cancelToken: cancelToken.token,
+        }
+      );
 
       if (response.status === 200) {
         return response.data;

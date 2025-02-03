@@ -31,8 +31,10 @@ const LogoutPrompt = ({ show, user }: LogoutPromptProps) => {
 
   const handleLanguageChange = () => {
     if (i18n.language === "es") {
+      localStorage.setItem("language", "en");
       i18n.changeLanguage("en");
     } else {
+      localStorage.setItem("language", "es");
       i18n.changeLanguage("es");
     }
   };

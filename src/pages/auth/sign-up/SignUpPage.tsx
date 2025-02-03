@@ -55,29 +55,29 @@ const SignUpPage = () => {
                 confirmPassword?: string;
               } = {};
               if (!values.email) {
-                errors.email = "Required";
+                errors.email = t("signup.required");
               } else if (
                 !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
               ) {
-                errors.email = "Invalid email format";
+                errors.email = t("signup.email.invalid");
               }
 
               if (!values.password) {
-                errors.password = "Required";
+                errors.password = t("signup.required");
               }
 
               if (!values.name) {
-                errors.name = "Required";
+                errors.name = t("signup.required");
               }
 
               if (!values.username) {
-                errors.username = "Required";
+                errors.username = t("signup.required");
               }
 
               if (!values.confirmPassword) {
-                errors.confirmPassword = "Required";
+                errors.confirmPassword = t("signup.required");
               } else if (values.confirmPassword !== values.password) {
-                errors.confirmPassword = "Passwords do not match";
+                errors.confirmPassword = t("signup.password.invalid");
               }
 
               return errors;
