@@ -64,5 +64,8 @@
   "title": {
     "login": "Ingresa tu correo electrónico",
     "register": "Crea tu cuenta"
+  },
+  "toast": {
+    "logout": "Cerraste Sesión!"
   }
 }

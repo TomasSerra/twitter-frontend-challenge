@@ -17,7 +17,6 @@ const PostPage = () => {
     const fetchPost = async () => {
       try {
         const res = await getPostById(postId);
-        console.log(res);
         setPost(res);
       } catch (e) {
         console.error(e);

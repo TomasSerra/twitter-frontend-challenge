@@ -24,7 +24,7 @@ const ProtectedRoute = () => {
   const isAuthenticated = useAuth();
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/sign-in" replace />;

@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../button/Button";
 import useHttpRequestService from "../../service/useHttpRequestService";
 import UserDataBox from "../user-data-box/UserDataBox";
 import { useTranslation } from "react-i18next";
 import { ButtonType } from "../button/StyledButton";
 import "./FollowUserBox.css";
-import { Author, User } from "../../service";
+import { Author } from "../../service";
+import { useMe } from "../../hooks/useMe";
 
 interface FollowUserBoxProps {
   profilePicture?: string;
@@ -21,19 +22,14 @@ const FollowUserBox = ({
   id,
 }: FollowUserBoxProps) => {
   const { t } = useTranslation();
-  const { me, unfollowUser, followUser } = useHttpRequestService();
-  const [user, setUser] = useState<User>();
+  const { unfollowUser, followUser } = useHttpRequestService();
+  const { data: user } = useMe();
 
   useEffect(() => {
-    handleGetUser().then((r) => {
-      setUser(r);
-      setIsFollowing(r?.following.some((f: Author) => f.id === id));
-    });
-  }, []);
-
-  const handleGetUser = async () => {
-    return await me();
-  };
+    if (user) {
+      setIsFollowing(user.following.some((f: Author) => f.id === id));
+    }
+  }, [user]);
 
   const [isFollowing, setIsFollowing] = useState(false);
 

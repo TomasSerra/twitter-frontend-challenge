@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileInfo from "./ProfileInfo";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../../components/modal/Modal";
@@ -10,6 +10,7 @@ import Button from "../../components/button/Button";
 import ProfileFeed from "../../components/feed/ProfileFeed";
 import { StyledContainer } from "../../components/common/Container";
 import { StyledH5 } from "../../components/common/text";
+import { useMe } from "../../hooks/useMe";
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState<User | null>(null);
@@ -21,33 +22,22 @@ const ProfilePage = () => {
     type: ButtonType.DEFAULT,
     buttonText: "",
   });
+  const { data: me } = useMe();
   const {
-    me,
     deleteProfile,
     followUser,
     unfollowUser,
     getProfileView,
     getProfile,
   } = useHttpRequestService();
-  const [user, setUser] = useState<User>();
 
   const id = useParams().id;
   const navigate = useNavigate();
 
   const { t } = useTranslation();
 
-  useEffect(() => {
-    handleGetUser().then((r) => {
-      setUser(r);
-    });
-  }, []);
-
-  const handleGetUser = async () => {
-    return await me();
-  };
-
   const handleButtonType = (): { component: ButtonType; text: string } => {
-    if (profile?.id === user?.id)
+    if (profile?.id === me?.id)
       return { component: ButtonType.DELETE, text: t("buttons.delete") };
     if (following)
       return { component: ButtonType.OUTLINED, text: t("buttons.unfollow") };
@@ -55,7 +45,7 @@ const ProfilePage = () => {
   };
 
   const handleSubmit = () => {
-    if (profile?.id === user?.id) {
+    if (profile?.id === me?.id) {
       deleteProfile().then(() => {
         localStorage.removeItem("token");
         navigate("/sign-in");
@@ -76,7 +66,7 @@ const ProfilePage = () => {
   if (!id) return null;
 
   const handleButtonAction = async () => {
-    if (profile?.id === user?.id) {
+    if (profile?.id === me?.id) {
       setShowModal(true);
       setModalValues({
         title: t("modal-title.delete-account"),
@@ -104,7 +94,6 @@ const ProfilePage = () => {
   const getProfileData = async () => {
     getProfileView(id)
       .then((res) => {
-        console.log("Profile: ", res);
         setProfile({ ...res.user, private: !res.isPublic });
         setFollowing(res.isFollowing);
       })
@@ -117,6 +106,7 @@ const ProfilePage = () => {
         maxHeight={"100vh"}
         borderRight={"1px solid #ebeef0"}
         maxWidth={"600px"}
+        overflowY={"auto"}
       >
         {profile && (
           <>

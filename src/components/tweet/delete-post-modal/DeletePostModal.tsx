@@ -9,6 +9,8 @@ import { ButtonType } from "../../button/StyledButton";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { Post } from "../../../service";
 import { StyledDeletePostModalContainer } from "./DeletePostModalContainer";
+import { useToast } from "../../toast/ToastContext";
+import { ToastType } from "../../toast/Toast";
 
 interface DeletePostModalProps {
   show: boolean;
@@ -26,14 +28,17 @@ export const DeletePostModal = ({
   const dispatch = useAppDispatch();
   const { deletePost } = useHttpRequestService();
   const { t } = useTranslation();
+  const { showToast } = useToast();
 
   const handleDelete = () => {
     try {
+      showToast(ToastType.SUCCESS, t("toast.post.delete.success"));
       deletePost(id).then((res) => console.log(res));
       const newFeed = feed.filter((post: Post) => post.id !== id);
       dispatch(updateFeed(newFeed));
       handleClose();
     } catch (error) {
+      showToast(ToastType.ALERT, t("toast.post.delete.error"));
       console.log(error);
     }
   };

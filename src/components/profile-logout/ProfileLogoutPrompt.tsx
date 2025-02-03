@@ -3,12 +3,11 @@ import {
   StyledLogoutPrompt,
   StyledProfileLogoutPromptContainer,
 } from "./StyledProfileLogoutPromptContainer";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import icon from "../../assets/icon.jpg";
 import { StyledP } from "../common/text";
 import { StyledContainer } from "../common/Container";
-import useHttpRequestService from "../../service/useHttpRequestService";
-import { User } from "../../service";
+import { useMe } from "../../hooks/useMe";
 
 interface ProfileLogoutPromptProps {
   margin: string;
@@ -20,16 +19,7 @@ const ProfileLogoutPrompt = ({
   direction,
 }: ProfileLogoutPromptProps) => {
   const [logoutOpen, setLogoutOpen] = useState(false);
-  const { me } = useHttpRequestService();
-  const [user, setUser] = useState<User>();
-
-  useEffect(() => {
-    handleGetUser().then((r) => setUser(r));
-  }, []);
-
-  const handleGetUser = async () => {
-    return await me();
-  };
+  const { data: user } = useMe();
 
   const handleLogout = () => {
     setLogoutOpen(!logoutOpen);
@@ -56,7 +46,7 @@ const ProfileLogoutPrompt = ({
             margin={margin}
             onClick={(event) => handleButtonClick(event)}
           >
-            <LogoutPrompt show={logoutOpen} />
+            <LogoutPrompt show={logoutOpen} user={user} />
           </StyledLogoutPrompt>
         )}
       </StyledProfileLogoutPromptContainer>

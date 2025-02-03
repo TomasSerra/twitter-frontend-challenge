@@ -9,28 +9,21 @@ import { ButtonType } from "../../button/StyledButton";
 import { StyledPromptContainer } from "./PromptContainer";
 import { StyledContainer } from "../../common/Container";
 import { StyledP } from "../../common/text";
-import useHttpRequestService from "../../../service/useHttpRequestService";
 import { User } from "../../../service";
+import { useToast } from "../../toast/ToastContext";
+import { ToastType } from "../../toast/Toast";
 
 interface LogoutPromptProps {
   show: boolean;
+  user: User;
 }
 
-const LogoutPrompt = ({ show }: LogoutPromptProps) => {
+const LogoutPrompt = ({ show, user }: LogoutPromptProps) => {
   const [showPrompt, setShowPrompt] = useState<boolean>(show);
   const [showModal, setShowModal] = useState<boolean>(false);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const { me } = useHttpRequestService();
-  const [user, setUser] = useState<User>();
-
-  useEffect(() => {
-    handleGetUser().then((r) => setUser(r));
-  }, []);
-
-  const handleGetUser = async () => {
-    return await me();
-  };
+  const { showToast } = useToast();
 
   const handleClick = () => {
     setShowModal(true);
@@ -45,6 +38,7 @@ const LogoutPrompt = ({ show }: LogoutPromptProps) => {
   };
 
   const handleLogout = () => {
+    showToast(ToastType.SUCCESS, t("toast.logout"));
     localStorage.removeItem("token");
     navigate("/sign-in");
   };

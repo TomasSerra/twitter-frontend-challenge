@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "../button/Button";
 import TweetInput from "../tweet-input/TweetInput";
 import useHttpRequestService from "../../service/useHttpRequestService";
@@ -12,7 +12,9 @@ import { StyledTweetBoxContainer } from "./TweetBoxContainer";
 import { StyledContainer } from "../common/Container";
 import { StyledButtonContainer } from "./ButtonContainer";
 import { useDispatch, useSelector } from "react-redux";
-import { User } from "../../service";
+import { useMe } from "../../hooks/useMe";
+import { useToast } from "../toast/ToastContext";
+import { ToastType } from "../toast/Toast";
 
 interface TweetBoxProps {
   parentId?: string;
@@ -29,18 +31,11 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
   const { length, query } = useSelector(
     (state: { user: { length: number; query: string } }) => state.user
   );
-  const { me, createPost, getPosts } = useHttpRequestService();
+  const { createPost, getPosts } = useHttpRequestService();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [user, setUser] = useState<User>();
-
-  useEffect(() => {
-    handleGetUser().then((r) => setUser(r));
-  }, []);
-
-  const handleGetUser = async () => {
-    return await me();
-  };
+  const { data: user } = useMe();
+  const { showToast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
@@ -49,6 +44,7 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
   const handleSubmit = async () => {
     try {
       await createPost({ content, images }).then(async (res) => {
+        showToast(ToastType.SUCCESS, t("toast.post.create.success"));
         setContent("");
         setImages([]);
         setImagesPreview([]);
@@ -58,6 +54,7 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
         close && close();
       });
     } catch (e) {
+      showToast(ToastType.SUCCESS, t("toast.post.create.error"));
       console.error(e);
     }
   };

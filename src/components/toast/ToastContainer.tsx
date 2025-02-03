@@ -5,7 +5,23 @@ import { Theme } from "../../util/LightTheme";
 interface ToastContainerProps {
   type: ToastType;
   theme: Theme;
+  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
 }
+
+const getContainerColor = (props: ToastContainerProps) => {
+  switch (props.type) {
+    case ToastType.ALERT:
+      return props.theme.colors.errorContainer;
+    case ToastType.SUCCESS:
+      return props.theme.colors.successContainer;
+    case ToastType.WARNING:
+      return props.theme.colors.warningContainer;
+    case ToastType.INFO:
+      return props.theme.colors.infoContainer;
+    default:
+      return props.theme.colors.errorContainer;
+  }
+};
 
 export const StyledToastContainer = styled.div`
   display: flex;
@@ -14,26 +30,11 @@ export const StyledToastContainer = styled.div`
   gap: 16px;
   position: fixed;
   border-radius: 8px;
-  border: 1px solid
-    ${(props: ToastContainerProps) => {
-      switch (props.type) {
-        case ToastType.ALERT:
-          return props.theme.colors.errorContainer;
-        default:
-          return props.theme.colors.errorContainer;
-      }
-    }};
+  border: 1px solid ${getContainerColor};
   background: ${(props: ToastContainerProps) => props.theme.background};
 
   p {
-    color: ${(props: ToastContainerProps) => {
-      switch (props.type) {
-        case ToastType.ALERT:
-          return props.theme.colors.errorContainer;
-        default:
-          return props.theme.colors.errorContainer;
-      }
-    }};
+    color: ${getContainerColor};
     margin: 0;
     font-variant-numeric: lining-nums tabular-nums;
     /* Body-2 */
@@ -49,4 +50,18 @@ export const StyledToastContainer = styled.div`
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   }
+  ${({ position }) => {
+    switch (position) {
+      case "top-right":
+        return `top: 20px; right: 20px;`;
+      case "top-left":
+        return `top: 20px; left: 20px;`;
+      case "bottom-right":
+        return `bottom: 20px; right: 20px;`;
+      case "bottom-left":
+        return `bottom: 20px; left: 20px;`;
+      default:
+        return `bottom: 20px; right: 20px;`;
+    }
+  }}
 `;

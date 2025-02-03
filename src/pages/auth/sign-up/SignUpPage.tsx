@@ -9,6 +9,7 @@ import LabeledInput from "../../../components/labeled-input/LabeledInput";
 import Button from "../../../components/button/Button";
 import { ButtonType } from "../../../components/button/StyledButton";
 import { StyledH3 } from "../../../components/common/text";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface SignUpData {
   name: string;
@@ -23,6 +24,7 @@ const SignUpPage = () => {
   const { signUp } = useHttpRequestService();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const handleChange =
     (prop: string) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +33,10 @@ const SignUpPage = () => {
   const handleSubmit = async () => {
     const { confirmPassword, ...requestData } = data;
     signUp(requestData)
-      .then(() => navigate("/"))
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ["me"] });
+        window.location.href = "/";
+      })
       .catch((e) => {
         setError(e.message);
       });

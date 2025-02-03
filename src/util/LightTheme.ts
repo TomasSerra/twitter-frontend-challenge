@@ -13,6 +13,9 @@ export const LightTheme: Partial<Theme> = {
     text: "#566370",
     black: "#000000",
     errorContainer: "#E5397F",
+    successContainer: "#4CAF50",
+    warningContainer: "#FFC107",
+    infoContainer: "#2196F3",
   },
   hover: {
     default: "#428AD2",
@@ -47,6 +50,9 @@ export type Theme = {
     text: string;
     black: string;
     errorContainer: string;
+    successContainer: string;
+    warningContainer: string;
+    infoContainer: string;
   };
   hover: {
     default: string;

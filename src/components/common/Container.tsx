@@ -14,7 +14,7 @@ const ContainerBase = styled.div`
   position: relative;
   scrollbar-width: auto;
   border-radius: 0;
-  min-height: auto;
+  height: fit-content;
   min-width: 0;
   width: 100%;
   -webkit-tap-highlight-color: transparent;

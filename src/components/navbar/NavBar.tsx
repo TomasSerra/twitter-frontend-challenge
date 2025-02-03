@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavItem from "./navItem/NavItem";
 import Button from "../button/Button";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -11,38 +11,15 @@ import { StyledNavBarContainer } from "./NavBarContainer";
 import { StyledContainer } from "../common/Container";
 import { StyledIconContainer } from "./IconContainer";
 import { StyledNavItemsContainer } from "./navItem/NavItemsContainer";
-import useHttpRequestService from "../../service/useHttpRequestService";
-import { User } from "../../service";
 import ProfileLogoutPrompt from "../profile-logout/ProfileLogoutPrompt";
+import { useMe } from "../../hooks/useMe";
 
 const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [tweetModalOpen, setTweetModalOpen] = useState(false);
-  const [logoutOpen, setLogoutOpen] = useState(false);
-  const { me } = useHttpRequestService();
-  const [user, setUser] = useState<User>();
+  const { data: user } = useMe();
   const { t } = useTranslation();
-
-  useEffect(() => {
-    handleGetUser().then((r) => setUser(r));
-  }, []);
-
-  const handleGetUser = async () => {
-    return await me();
-  };
-
-  const handleAvatarClick = () => {
-    if (window.innerWidth < 1265) {
-      handleLogout();
-    } else {
-      navigate(`/profile/${user?.id}`);
-    }
-  };
-
-  const handleLogout = () => {
-    setLogoutOpen(!logoutOpen);
-  };
 
   return (
     <StyledNavBarContainer>

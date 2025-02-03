@@ -62,5 +62,18 @@
   "title": {
     "login": "Enter your email",
     "register": "Create your account"
+  },
+  "toast": {
+    "logout": "You have been logged out!",
+    "post": {
+      "delete": {
+        "success": "Post deleted",
+        "error": "Error deleting post, try again"
+      },
+      "create": {
+        "success": "Post created",
+        "error": "Error creating post, try again"
+      }
+    }
   }
 }
