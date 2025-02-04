@@ -1,7 +1,7 @@
 import Avatar from "../common/avatar/Avatar";
 import icon from "../../assets/icon.jpg";
-import { useNavigate } from "react-router-dom";
-import "./UserDataBox.css";
+import { StyledUserDataBoxContainer } from "./UserDataBoxContainer";
+import { StyledUserInfoContainer } from "./UserInfoContainer";
 
 interface UserDataBoxProps {
   name?: string;
@@ -18,18 +18,18 @@ export const UserDataBox = ({
   onClick,
 }: UserDataBoxProps) => {
   return (
-    <div className="user-container" onClick={onClick}>
+    <StyledUserDataBoxContainer onClick={onClick}>
       <Avatar
         width={"48px"}
         height={"48px"}
         src={profilePicture ?? icon}
         alt={name ?? "Name"}
       />
-      <div className="user-info-container">
+      <StyledUserInfoContainer>
         <p>{name ?? "Name"}</p>
         <p style={{ color: "#566370" }}>{"@" + (username ?? "Username")}</p>
-      </div>
-    </div>
+      </StyledUserInfoContainer>
+    </StyledUserDataBoxContainer>
   );
 };
 
