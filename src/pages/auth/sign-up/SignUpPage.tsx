@@ -5,7 +5,11 @@ import AuthWrapper from "../../../pages/auth/AuthWrapper";
 import useHttpRequestService from "../../../service/useHttpRequestService";
 import LabeledInput from "../../../components/labeled-input/LabeledInput";
 import Button from "../../../components/button/Button";
-import { ButtonType } from "../../../components/button/StyledButton";
+import {
+  ButtonColor,
+  ButtonSize,
+  ButtonType,
+} from "../../../components/button/StyledButton";
 import { StyledH3 } from "../../../components/common/text";
 import { useQueryClient } from "@tanstack/react-query";
 import { Formik } from "formik";
@@ -142,20 +146,24 @@ const SignUpPage = () => {
                 <p className={"error-message"}>{error}</p>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <Button
-                    text={t("buttons.register")}
-                    buttonType={ButtonType.FOLLOW}
-                    size={"MEDIUM"}
+                    buttonType={ButtonType.FULFILLED}
+                    buttonColor={ButtonColor.PRIMARY}
+                    size={ButtonSize.MEDIUM}
+                    disabled={isSubmitting}
                     onClick={() => {
                       handleSubmit();
                     }}
-                    disabled={isSubmitting}
-                  />
+                  >
+                    {t("buttons.register")}
+                  </Button>
                   <Button
-                    text={t("buttons.login")}
                     buttonType={ButtonType.OUTLINED}
-                    size={"MEDIUM"}
+                    buttonColor={ButtonColor.WHITE}
+                    size={ButtonSize.MEDIUM}
                     onClick={() => navigate("/sign-in")}
-                  />
+                  >
+                    {t("buttons.login")}
+                  </Button>
                 </div>
               </>
             )}

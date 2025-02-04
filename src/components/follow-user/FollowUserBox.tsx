@@ -3,7 +3,7 @@ import Button from "../button/Button";
 import useHttpRequestService from "../../service/useHttpRequestService";
 import UserDataBox from "../user-data-box/UserDataBox";
 import { useTranslation } from "react-i18next";
-import { ButtonType } from "../button/StyledButton";
+import { ButtonColor, ButtonSize, ButtonType } from "../button/StyledButton";
 import { Author } from "../../service";
 import { useMe } from "../../hooks/useMe";
 import { StyledFollowUserBoxContainer } from "./FollowUserBoxContainer";
@@ -51,11 +51,13 @@ const FollowUserBox = ({
         username={username!}
       />
       <Button
-        text={isFollowing ? t("buttons.unfollow") : t("buttons.follow")}
-        buttonType={isFollowing ? ButtonType.DELETE : ButtonType.FOLLOW}
-        size={"SMALL"}
+        buttonColor={isFollowing ? ButtonColor.WHITE : ButtonColor.PRIMARY}
+        buttonType={isFollowing ? ButtonType.OUTLINED : ButtonType.FULFILLED}
+        size={ButtonSize.MEDIUM}
         onClick={handleFollow}
-      />
+      >
+        {isFollowing ? t("buttons.unfollow") : t("buttons.follow")}
+      </Button>
     </StyledFollowUserBoxContainer>
   );
 };

@@ -4,7 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../../components/modal/Modal";
 import { useTranslation } from "react-i18next";
 import { User } from "../../service";
-import { ButtonType } from "../../components/button/StyledButton";
+import {
+  ButtonColor,
+  ButtonSize,
+  ButtonType,
+} from "../../components/button/StyledButton";
 import useHttpRequestService from "../../service/useHttpRequestService";
 import Button from "../../components/button/Button";
 import ProfileFeed from "../../components/feed/ProfileFeed";
@@ -19,7 +23,8 @@ const ProfilePage = () => {
   const [modalValues, setModalValues] = useState({
     text: "",
     title: "",
-    type: ButtonType.DEFAULT,
+    buttonType: ButtonType.FULFILLED,
+    buttonColor: ButtonColor.PRIMARY,
     buttonText: "",
   });
   const { data: me } = useMe();
@@ -31,12 +36,25 @@ const ProfilePage = () => {
 
   const { t } = useTranslation();
 
-  const handleButtonType = (): { component: ButtonType; text: string } => {
+  const handleButtonType = (): {
+    component: { type: ButtonType; color: ButtonColor };
+    text: string;
+  } => {
     if (profile?.id === me?.id)
-      return { component: ButtonType.DELETE, text: t("buttons.delete") };
+      return {
+        component: { type: ButtonType.FULFILLED, color: ButtonColor.DELETE },
+        text: t("buttons.delete"),
+      };
     if (following)
-      return { component: ButtonType.OUTLINED, text: t("buttons.unfollow") };
-    else return { component: ButtonType.FOLLOW, text: t("buttons.follow") };
+      return {
+        component: { type: ButtonType.OUTLINED, color: ButtonColor.DELETE },
+        text: t("buttons.unfollow"),
+      };
+    else
+      return {
+        component: { type: ButtonType.FULFILLED, color: ButtonColor.PRIMARY },
+        text: t("buttons.follow"),
+      };
   };
 
   const handleSubmit = () => {
@@ -66,8 +84,9 @@ const ProfilePage = () => {
       setModalValues({
         title: t("modal-title.delete-account"),
         text: t("modal-content.delete-account"),
-        type: ButtonType.DELETE,
+        buttonType: ButtonType.FULFILLED,
         buttonText: t("buttons.delete"),
+        buttonColor: ButtonColor.DELETE,
       });
     } else {
       if (following) {
@@ -75,8 +94,9 @@ const ProfilePage = () => {
         setModalValues({
           text: t("modal-content.unfollow"),
           title: `${t("modal-title.unfollow")} @${profile?.username}?`,
-          type: ButtonType.FOLLOW,
+          buttonType: ButtonType.FULFILLED,
           buttonText: t("buttons.unfollow"),
+          buttonColor: ButtonColor.DELETE,
         });
       } else {
         await followUser(id);
@@ -121,11 +141,13 @@ const ProfilePage = () => {
                   profilePicture={profile!.profilePicture}
                 />
                 <Button
-                  buttonType={handleButtonType().component}
-                  size={"100px"}
+                  buttonType={handleButtonType().component.type}
+                  buttonColor={handleButtonType().component.color}
+                  size={ButtonSize.MEDIUM}
                   onClick={handleButtonAction}
-                  text={handleButtonType().text}
-                />
+                >
+                  {handleButtonType().text}
+                </Button>
               </StyledContainer>
             </StyledContainer>
             <StyledContainer width={"100%"}>
@@ -141,11 +163,13 @@ const ProfilePage = () => {
               title={modalValues.title}
               acceptButton={
                 <Button
-                  buttonType={modalValues.type}
-                  text={modalValues.buttonText}
-                  size={"MEDIUM"}
+                  buttonType={modalValues.buttonType}
+                  buttonColor={modalValues.buttonColor}
+                  size={ButtonSize.MEDIUM}
                   onClick={handleSubmit}
-                />
+                >
+                  {modalValues.buttonText}
+                </Button>
               }
               onClose={() => {
                 setShowModal(false);

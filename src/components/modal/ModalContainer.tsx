@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const StyledModalContainer = styled.div`
   display: block;
-  padding: 40px 24px;
+  padding: 20px 24px;
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
@@ -15,7 +15,7 @@ export const StyledModalContainer = styled.div`
   left: 50%;
   max-width: 286px;
   width: auto;
-  height: 279px;
+  height: fit-content;
   box-sizing: border-box;
   z-index: 3;
   p {

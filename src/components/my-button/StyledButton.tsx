@@ -148,7 +148,7 @@ export const StyledButton = styled.button<ButtonProps>`
         return "100px";
     }
   }};
-  height: 40px;
+  height: 33px;
   border-radius: 40px;
   font-family: ${(props) => props.theme.font.default};
   font-style: normal;
@@ -182,19 +182,11 @@ export const StyledButton = styled.button<ButtonProps>`
     }}
   }
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
   span {
     display: block;
     white-space: nowrap;
-    overflow-x: hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
   }
 `;

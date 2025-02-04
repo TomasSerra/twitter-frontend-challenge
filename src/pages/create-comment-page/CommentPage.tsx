@@ -10,7 +10,11 @@ import TweetInput from "../../components/tweet-input/TweetInput";
 import ImageInput from "../../components/common/ImageInput";
 import { setLength, updateFeed } from "../../redux/user";
 import { useTranslation } from "react-i18next";
-import { ButtonType } from "../../components/button/StyledButton";
+import {
+  ButtonColor,
+  ButtonSize,
+  ButtonType,
+} from "../../components/button/StyledButton";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { StyledContainer } from "../../components/common/Container";
 import { StyledLine } from "../../components/common/Line";
@@ -68,12 +72,14 @@ const CommentPage = () => {
       >
         <BackArrowIcon onClick={exit} />
         <Button
-          text={"Tweet"}
-          buttonType={ButtonType.DEFAULT}
-          size={"SMALL"}
+          buttonType={ButtonType.FULFILLED}
+          buttonColor={ButtonColor.PRIMARY}
+          size={ButtonSize.SMALL}
           onClick={handleSubmit}
           disabled={content.length === 0}
-        />
+        >
+          Tweet
+        </Button>
       </StyledContainer>
       {post && (
         <StyledContainer gap={"16px"}>

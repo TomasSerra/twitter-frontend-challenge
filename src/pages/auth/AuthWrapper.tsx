@@ -45,6 +45,7 @@ const StyledSignInWrapper = styled.div`
     line-height: 13px;
     letter-spacing: -0.01em;
     min-height: 13px;
+    margin: 0;
   }
 
   /* Media query for screens larger than the phone size */

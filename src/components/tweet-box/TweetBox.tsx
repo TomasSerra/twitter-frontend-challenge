@@ -7,7 +7,7 @@ import ImageContainer from "../tweet/tweet-image/ImageContainer";
 import { BackArrowIcon } from "../icon/Icon";
 import ImageInput from "../common/ImageInput";
 import { useTranslation } from "react-i18next";
-import { ButtonType } from "../button/StyledButton";
+import { ButtonColor, ButtonSize, ButtonType } from "../button/StyledButton";
 import { StyledTweetBoxContainer } from "./TweetBoxContainer";
 import { StyledContainer } from "../common/Container";
 import { StyledButtonContainer } from "./ButtonContainer";
@@ -82,12 +82,14 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
         >
           <BackArrowIcon onClick={close} />
           <Button
-            text={"Tweet"}
-            buttonType={ButtonType.DEFAULT}
-            size={"SMALL"}
+            buttonType={ButtonType.FULFILLED}
+            size={ButtonSize.SMALL}
+            buttonColor={ButtonColor.PRIMARY}
             onClick={handleSubmit}
             disabled={content.length === 0}
-          />
+          >
+            Tweet
+          </Button>
         </StyledContainer>
       )}
       <StyledContainer style={{ width: "100%" }}>
@@ -109,9 +111,9 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
           <ImageInput setImages={handleAddImage} parentId={parentId} />
           {!mobile && (
             <Button
-              text={"Tweet"}
-              buttonType={ButtonType.DEFAULT}
-              size={"SMALL"}
+              buttonType={ButtonType.FULFILLED}
+              size={ButtonSize.SMALL}
+              buttonColor={ButtonColor.PRIMARY}
               onClick={handleSubmit}
               disabled={
                 content.length <= 0 ||
@@ -119,7 +121,9 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
                 images.length > 4 ||
                 images.length < 0
               }
-            />
+            >
+              Tweet
+            </Button>
           )}
         </StyledButtonContainer>
       </StyledContainer>

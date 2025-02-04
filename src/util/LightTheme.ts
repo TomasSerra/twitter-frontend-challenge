@@ -9,7 +9,7 @@ export const LightTheme: Partial<Theme> = {
     inactiveBackground: "#F0F3F4",
     containerLine: "#F0F3F4",
     hover: "#E7E7E8",
-    outline: "#D1D9DD",
+    outline: "#000000",
     text: "#566370",
     black: "#000000",
     errorContainer: "#E5397F",
@@ -19,6 +19,8 @@ export const LightTheme: Partial<Theme> = {
   },
   hover: {
     default: "#428AD2",
+    main: "#428AD2",
+    white: "#FFFFFF",
     follow: "#428AD2",
     error: "#FF0000",
     outlined: "#f3f3f3",
@@ -56,6 +58,8 @@ export type Theme = {
   };
   hover: {
     default: string;
+    main: string;
+    white: string;
     follow: string;
     error: string;
     outlined: string;

@@ -5,7 +5,7 @@ import Button from "../../button/Button";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SwitchButton from "../../switch/SwitchButton";
-import { ButtonType } from "../../button/StyledButton";
+import { ButtonColor, ButtonSize, ButtonType } from "../../button/StyledButton";
 import { StyledPromptContainer } from "./PromptContainer";
 import { StyledContainer } from "../../common/Container";
 import { StyledP } from "../../common/text";
@@ -80,11 +80,13 @@ const LogoutPrompt = ({ show, user }: LogoutPromptProps) => {
         title={t("modal-title.logout")}
         acceptButton={
           <Button
-            buttonType={ButtonType.FOLLOW}
-            text={t("buttons.logout")}
-            size={"MEDIUM"}
+            buttonType={ButtonType.FULFILLED}
+            buttonColor={ButtonColor.DELETE}
+            size={ButtonSize.MEDIUM}
             onClick={handleLogout}
-          />
+          >
+            {t("buttons.logout")}
+          </Button>
         }
         onClose={() => setShowModal(false)}
       />
