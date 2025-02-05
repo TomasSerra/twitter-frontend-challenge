@@ -29,7 +29,6 @@ const useHttpRequestService = () => {
     try {
       const res = await axiosInstance.post(`${url}/auth/signup`, data);
       if (res.status === 201) {
-        localStorage.setItem("token", `Bearer ${res.data.token}`);
         showToast(ToastType.SUCCESS, t("toast.signup.success"));
         return true;
       }
@@ -219,7 +218,6 @@ const useHttpRequestService = () => {
         return response.data;
       }
     } catch (error) {
-      if (!axios.isCancel(error)) console.log(error);
       handleNotFound(error);
     }
   };

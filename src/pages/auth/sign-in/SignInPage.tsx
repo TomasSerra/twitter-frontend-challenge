@@ -12,7 +12,7 @@ import {
 import { StyledH3 } from "../../../components/common/text";
 import { useQueryClient } from "@tanstack/react-query";
 import { Formik } from "formik";
-import { ButtonSize } from "../../../components/my-button/StyledButton";
+import { ButtonSize } from "../../../components/button/StyledButton";
 
 const SignInPage = () => {
   const queryClient = useQueryClient();
@@ -23,9 +23,10 @@ const SignInPage = () => {
 
   const submit = ({ email, password }: { email: string; password: string }) => {
     signIn({ email, password })
-      .then(() => {
-        queryClient.invalidateQueries({ queryKey: ["me"] });
-        window.location.href = "/";
+      .then(async () => {
+        await queryClient.invalidateQueries({ queryKey: ["me"] });
+        await queryClient.refetchQueries({ queryKey: ["me"] });
+        navigate("/");
       })
       .catch(() => {});
   };
@@ -68,7 +69,7 @@ const SignInPage = () => {
                     type="email"
                     required
                     placeholder={"Enter user..."}
-                    title={t("input-params.email")}
+                    label={t("input-params.email")}
                     error={errors.email}
                     hasError={errors.email !== undefined || error !== null}
                     onChange={handleChange}
@@ -79,7 +80,7 @@ const SignInPage = () => {
                     type="password"
                     required
                     placeholder={"Enter password..."}
-                    title={t("input-params.password")}
+                    label={t("input-params.password")}
                     error={errors.password}
                     hasError={errors.password !== undefined || error !== null}
                     onChange={handleChange}

@@ -7,12 +7,14 @@ import { ButtonColor, ButtonSize, ButtonType } from "../button/StyledButton";
 import { Author } from "../../service";
 import { useMe } from "../../hooks/useMe";
 import { StyledFollowUserBoxContainer } from "./FollowUserBoxContainer";
+import { useNavigate } from "react-router-dom";
 
 interface FollowUserBoxProps {
   profilePicture?: string;
   name?: string;
   username?: string;
   id: string;
+  size?: ButtonSize;
 }
 
 const FollowUserBox = ({
@@ -20,20 +22,23 @@ const FollowUserBox = ({
   name,
   username,
   id,
+  size = ButtonSize.MEDIUM,
 }: FollowUserBoxProps) => {
   const { t } = useTranslation();
   const { unfollowUser, followUser } = useHttpRequestService();
-  const { data: user } = useMe();
+  const { data: me } = useMe();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      setIsFollowing(user.following.some((f: Author) => f.id === id));
+    if (me) {
+      setIsFollowing(me?.following?.some((f: Author) => f.id === id));
     }
-  }, [user]);
+  }, [me]);
 
   const [isFollowing, setIsFollowing] = useState(false);
 
-  const handleFollow = async () => {
+  const handleFollow = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     if (isFollowing) {
       await unfollowUser(id);
     } else {
@@ -42,8 +47,12 @@ const FollowUserBox = ({
     setIsFollowing(!isFollowing);
   };
 
+  const handleClick = () => {
+    navigate(`/profile/${id}`);
+  };
+
   return (
-    <StyledFollowUserBoxContainer>
+    <StyledFollowUserBoxContainer onClick={handleClick}>
       <UserDataBox
         id={id}
         name={name!}
@@ -53,8 +62,10 @@ const FollowUserBox = ({
       <Button
         buttonColor={isFollowing ? ButtonColor.WHITE : ButtonColor.PRIMARY}
         buttonType={isFollowing ? ButtonType.OUTLINED : ButtonType.FULFILLED}
-        size={ButtonSize.MEDIUM}
-        onClick={handleFollow}
+        size={size}
+        onClick={(e) => {
+          handleFollow(e);
+        }}
       >
         {isFollowing ? t("buttons.unfollow") : t("buttons.follow")}
       </Button>

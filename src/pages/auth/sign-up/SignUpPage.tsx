@@ -27,9 +27,10 @@ const SignUpPage = () => {
     password: string;
   }) => {
     signUp(data)
-      .then(() => {
-        queryClient.invalidateQueries({ queryKey: ["me"] });
-        window.location.href = "/";
+      .then(async () => {
+        await queryClient.invalidateQueries({ queryKey: ["me"] });
+        await queryClient.refetchQueries({ queryKey: ["me"] });
+        navigate("/sign-in");
       })
       .catch(() => {});
   };
@@ -98,7 +99,7 @@ const SignUpPage = () => {
                   <LabeledInput
                     required
                     placeholder={"Enter name..."}
-                    title={t("input-params.name")}
+                    label={t("input-params.name")}
                     error={errors.name}
                     hasError={!!errors.name || error !== null}
                     onChange={handleChange}
@@ -107,7 +108,7 @@ const SignUpPage = () => {
                   <LabeledInput
                     required
                     placeholder={"Enter username..."}
-                    title={t("input-params.username")}
+                    label={t("input-params.username")}
                     error={errors.username}
                     hasError={!!errors.username || error !== null}
                     onChange={handleChange}
@@ -116,7 +117,7 @@ const SignUpPage = () => {
                   <LabeledInput
                     required
                     placeholder={"Enter email..."}
-                    title={t("input-params.email")}
+                    label={t("input-params.email")}
                     error={errors.email}
                     hasError={!!errors.email || error !== null}
                     onChange={handleChange}
@@ -126,7 +127,7 @@ const SignUpPage = () => {
                     type="password"
                     required
                     placeholder={"Enter password..."}
-                    title={t("input-params.password")}
+                    label={t("input-params.password")}
                     error={errors.password}
                     hasError={!!errors.password || error !== null}
                     onChange={handleChange}
@@ -136,7 +137,7 @@ const SignUpPage = () => {
                     type="password"
                     required
                     placeholder={"Confirm password..."}
-                    title={t("input-params.confirm-password")}
+                    label={t("input-params.confirm-password")}
                     error={errors.confirmPassword}
                     hasError={!!errors.confirmPassword || error !== null}
                     onChange={handleChange}

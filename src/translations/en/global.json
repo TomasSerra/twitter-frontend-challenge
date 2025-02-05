@@ -98,7 +98,7 @@
       "server-error": "Please check your conection"
     },
     "signup": {
-      "success": "Welcome to Twitter!",
+      "success": "Register success",
       "conflict": "This user already exists",
       "bad-request": "Password is not strong enough",
       "server-error": "Please check your conection"

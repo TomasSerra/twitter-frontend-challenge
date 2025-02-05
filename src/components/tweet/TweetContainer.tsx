@@ -10,10 +10,9 @@ export const StyledTweetContainer = styled.div`
   gap: 16px;
   margin: 0;
   border-bottom: 1px solid ${(props) => props.theme.colors.containerLine};
-
+  transition: background-color 0.5s ease-in-out;
   p {
     color: ${(props) => props.theme.colors.black};
-    /* Body-1 */
     font-size: 15px;
     font-family: "Manrope", sans-serif;
     line-height: 110%;
@@ -21,5 +20,12 @@ export const StyledTweetContainer = styled.div`
     margin-left: 56px;
     margin-bottom: 0;
     margin-top: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  &:hover {
+    background-color: #fbfbfb;
   }
 `;

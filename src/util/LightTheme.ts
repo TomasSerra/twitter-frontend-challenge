@@ -6,6 +6,8 @@ export const LightTheme: Partial<Theme> = {
     dark: "#428AD2",
     error: "#E03C39",
     white: "#FFFFFF",
+    softWhite: "#f6f6f6",
+    softPrimary: "#e5edf7",
     inactiveBackground: "#F0F3F4",
     containerLine: "#F0F3F4",
     hover: "#E7E7E8",
@@ -45,6 +47,8 @@ export type Theme = {
     dark: string;
     error: string;
     white: string;
+    softWhite: string;
+    softPrimary: string;
     inactiveBackground: string;
     containerLine: string;
     hover: string;

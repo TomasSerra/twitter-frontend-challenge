@@ -13,6 +13,7 @@ const queryClient = new QueryClient({
     },
   },
 });
+
 const App = () => {
   const language = localStorage.getItem("language");
   if (language) {

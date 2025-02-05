@@ -9,8 +9,8 @@ export const StyledSideBarPageWrapper = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding-left: 15%;
-  padding-right: 15%;
+  padding-left: 10%;
+  padding-right: 10%;
   overflow: hidden;
 
   @media (max-width: 600px) {

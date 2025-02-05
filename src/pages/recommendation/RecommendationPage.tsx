@@ -10,28 +10,28 @@ import { StyledH5 } from "../../components/common/text";
 
 const RecommendationPage = () => {
   const [page, setPage] = useState(0);
-  const { users, loading } = useGetRecommendations({ page });
+  const { users, loading, hasMore } = useGetRecommendations({ page });
   const { t } = useTranslation();
 
   const observer = useRef<IntersectionObserver | null>(null);
   const lastRecommendation = useCallback(
     (node: Element | null) => {
-      if (loading) return;
+      if (loading || !hasMore) return;
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-          setPage((prevPage) => prevPage + 10);
+          setPage((prevPage) => prevPage + 1);
         }
       });
 
       if (node) observer.current.observe(node);
     },
-    [loading, setPage]
+    [loading, hasMore, setPage]
   );
 
   return (
-    <StyledContainer maxWidth={"600px"} borderRight={"1px solid"}>
+    <StyledContainer maxWidth={"600px"} borderRight={"1px solid #e5e5e5"}>
       <StyledContainer padding={"16px"} maxHeight={"53px"}>
         <StyledH5>{t("header.connect")}</StyledH5>
       </StyledContainer>

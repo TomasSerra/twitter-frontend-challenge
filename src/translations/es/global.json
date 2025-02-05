@@ -100,7 +100,7 @@
       "server-error": "Por favor verifica tu conexión"
     },
     "signup": {
-      "success": "¡Bienvenido a Twitter!",
+      "success": "Registrado con éxito",
       "conflict": "Este usuario ya esta registrado",
       "bad-request": "La contraseña no es segura",
       "server-error": "Por favor verifica tu conexión"

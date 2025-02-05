@@ -22,12 +22,13 @@ export const useGetRecommendations = ({ page }: UseGetRecommendationsProps) => {
       setLoading(true);
       getUsers()
         .then((response) => {
-          if (response.length === 0) {
+          const responseUsers = response.users;
+          if (responseUsers?.length === 0) {
             setHasMore(false);
           } else {
             setUsers((prev) => {
-              const uniqueIds = new Set(prev.map((user) => user.id));
-              const filteredUsers = response.filter(
+              const uniqueIds = new Set(prev?.map((user) => user.id));
+              const filteredUsers = responseUsers?.filter(
                 (user: Author) => !uniqueIds.has(user.id)
               );
               return [...prev, ...filteredUsers];
@@ -38,9 +39,10 @@ export const useGetRecommendations = ({ page }: UseGetRecommendationsProps) => {
         .catch((e) => {
           setError(e);
           setLoading(false);
+          setHasMore(false);
         });
     }
   }, [page, hasMore]);
 
-  return { users, loading, error };
+  return { users, loading, error, hasMore };
 };

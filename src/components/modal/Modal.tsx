@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { StyledBlurredBackground } from "../common/BlurredBackground";
 import Button from "../button/Button";
 import { ButtonColor, ButtonSize, ButtonType } from "../button/StyledButton";

@@ -14,15 +14,11 @@ export const StyledPromptContainer = styled.div`
   border-radius: 16px;
   border: 1px solid ${(props) => props.theme.colors.containerLine};
   transition: 0.3s ease-in-out;
-    box-shadow: 2px 2px 2px grey;
-
-  &:hover {
-    cursor: pointer;
-    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-  }
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+  cursor: default;
 
   @media (max-width: 1265px) {
-    right:50%;
+    right: 50%;
     p {
       display: flex;
     }

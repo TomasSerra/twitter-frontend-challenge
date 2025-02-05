@@ -4,21 +4,33 @@ import useHttpRequestService from "../../../../service/useHttpRequestService";
 import { useTranslation } from "react-i18next";
 import { User } from "../../../../service";
 import { StyledSuggestionBoxContainer } from "./SuggestionBoxContainer";
+import {
+  ButtonColor,
+  ButtonSize,
+  ButtonType,
+} from "../../../../components/button/StyledButton";
+import Button from "../../../../components/button/Button";
+import { useNavigate } from "react-router-dom";
 
 const SuggestionBox = () => {
   const [users, setUsers] = useState<User[]>([]);
   const { getRecommendedUsers } = useHttpRequestService();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     try {
       getRecommendedUsers(6, 0).then((res) => {
-        setUsers(res);
+        setUsers(res.users);
       });
     } catch (e) {
       console.log(e);
     }
   }, []);
+
+  const handleMoreSuggestions = () => {
+    navigate("/recommendations");
+  };
 
   return (
     <StyledSuggestionBoxContainer>
@@ -36,13 +48,25 @@ const SuggestionBox = () => {
               name={user?.name}
               username={user?.username}
               profilePicture={user?.profilePicture}
+              size={ButtonSize.SMALL}
             />
           ))
       ) : (
         <p>{t("suggestion.no-recommendations")}</p>
       )}
       {users?.length > 5 && (
-        <a href="/recommendations">{t("suggestion.show-more")}</a>
+        <div
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+        >
+          <Button
+            onClick={handleMoreSuggestions}
+            size={ButtonSize.LARGE}
+            buttonColor={ButtonColor.PRIMARY}
+            buttonType={ButtonType.OUTLINED}
+          >
+            {t("suggestion.show-more")}
+          </Button>
+        </div>
       )}
     </StyledSuggestionBoxContainer>
   );

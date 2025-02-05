@@ -66,7 +66,11 @@ const LogoutPrompt = ({ show, user }: LogoutPromptProps) => {
               onChange={handleLanguageChange}
             />
           </StyledContainer>
-          <StyledContainer onClick={handleClick} alignItems={"center"}>
+          <StyledContainer
+            onClick={handleClick}
+            alignItems={"center"}
+            style={{ cursor: "pointer" }}
+          >
             <StyledP primary>{`${t("buttons.logout")} @${
               user?.username
             }`}</StyledP>

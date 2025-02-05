@@ -148,6 +148,18 @@ export const StyledButton = styled.button<ButtonProps>`
         return "100px";
     }
   }};
+  min-width: ${(props) => {
+    switch (props.size) {
+      case ButtonSize.SMALL:
+        return "75px";
+      case ButtonSize.MEDIUM:
+        return "100px";
+      case ButtonSize.LARGE:
+        return "180px";
+      default:
+        return "100px";
+    }
+  }};
   height: 40px;
   border-radius: 40px;
   font-family: ${(props) => props.theme.font.default};
@@ -188,13 +200,12 @@ export const StyledButton = styled.button<ButtonProps>`
   }
 
   span {
-    display: block;
     white-space: nowrap;
-    overflow-x: hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
-    height: 100%;
-    display: flex;
     align-items: center;
+    height: fit-content;
+    padding: 2px 0;
   }
 `;

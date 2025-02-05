@@ -1,65 +1,58 @@
-import React, {
-  ChangeEvent,
-  HTMLInputTypeAttribute,
-  useRef,
-  useState,
-} from "react";
-import { StyledInputContainer } from "./InputContainer";
+import { ChangeEvent, HTMLInputTypeAttribute, useRef, useState } from "react";
+import { StyledInputContainer, InputType, InputSize } from "./InputContainer";
 import { StyledInputTitle } from "./InputTitle";
 import { StyledInputElement } from "./StyledInputElement";
 
-interface InputWithLabelProps {
+interface InputWithLabelProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   type?: HTMLInputTypeAttribute;
-  title: string;
+  label: string;
   placeholder: string;
-  required: boolean;
+  required?: boolean;
   error?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   name: string;
   hasError?: boolean;
+  inputSize?: InputSize;
+  inputType?: InputType;
 }
 
 const LabeledInput = ({
-  title,
+  label,
   placeholder,
-  required,
+  required = false,
   error,
   onChange,
   type = "text",
   value,
   name,
   hasError = false,
+  inputSize = InputSize.MEDIUM,
+  inputType = InputType.OUTLINED,
+  ...props
 }: InputWithLabelProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [focus, setFocus] = useState(false);
 
-  const handleFocus = () => {
-    setFocus(true);
-  };
-
-  const handleBlur = () => {
-    setFocus(false);
-  };
-
-  const handleClick = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
+  const handleFocus = () => setFocus(true);
+  const handleBlur = () => setFocus(false);
+  const handleClick = () => inputRef.current?.focus();
 
   return (
     <>
       <StyledInputContainer
-        className={`${hasError ? "error" : ""}`}
+        className={`${hasError ? "error" : ""} ${focus ? "active-div" : ""}`}
         onClick={handleClick}
+        inputType={inputType}
+        inputSize={inputSize}
       >
         <StyledInputTitle
           className={`${focus ? "active-label" : ""} ${
             hasError ? "error" : ""
           }`}
         >
-          {title}
+          {label}
         </StyledInputTitle>
         <StyledInputElement
           type={type}
@@ -72,6 +65,7 @@ const LabeledInput = ({
           ref={inputRef}
           value={value}
           name={name}
+          {...props}
         />
       </StyledInputContainer>
       <p className="error-message">{error}</p>
