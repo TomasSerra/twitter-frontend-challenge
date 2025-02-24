@@ -93,7 +93,7 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
       <StyledReactionsContainer>
         <Reaction
           img={IconType.CHAT}
-          count={actualPost.qtyComments}
+          count={actualPost.comments?.length ?? 0}
           reactionFunction={() =>
             window.innerWidth > 600
               ? setShowCommentModal(true)
@@ -104,14 +104,14 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
         />
         <Reaction
           img={IconType.RETWEET}
-          count={actualPost.qtyRetweets}
+          count={actualPost.retweets?.length ?? 0}
           reactionFunction={() => handleReaction("RETWEET")}
           increment={1}
           reacted={hasReactedByType("RETWEET")}
         />
         <Reaction
           img={IconType.LIKE}
-          count={actualPost.qtyLikes}
+          count={actualPost.likes?.length ?? 0}
           reactionFunction={() => handleReaction("LIKE")}
           increment={1}
           reacted={hasReactedByType("LIKE")}

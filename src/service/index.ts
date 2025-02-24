@@ -27,9 +27,8 @@ export interface Post {
   author: Author;
   reactions: Reaction[];
   comments: Post[];
-  qtyComments: number;
-  qtyLikes: number;
-  qtyRetweets: number;
+  likes: any[];
+  retweets: Post[];
 }
 
 export interface Reaction {

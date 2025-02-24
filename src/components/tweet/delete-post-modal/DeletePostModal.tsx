@@ -39,7 +39,6 @@ export const DeletePostModal = ({
       handleClose();
     } catch (error) {
       showToast(ToastType.ALERT, t("toast.post.delete.error"));
-      console.log(error);
     }
   };
 

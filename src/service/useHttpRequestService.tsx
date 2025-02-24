@@ -128,9 +128,9 @@ const useHttpRequestService = () => {
     }
   };
 
-  const getPosts = async (query: string) => {
+  const getPosts = async (query?: string) => {
     try {
-      const res = await axiosInstance.get(`${url}/post/${query}`);
+      const res = await axiosInstance.get(`${url}/post${query || ""}`);
       if (res.status === 200) {
         return res.data;
       }
@@ -157,8 +157,9 @@ const useHttpRequestService = () => {
 
   const me = async () => {
     const res = await axiosInstance.get(`${url}/user/me`);
+    console.log(res);
     if (res.status === 200) {
-      return res.data.user;
+      return res.data;
     }
   };
 
@@ -197,7 +198,9 @@ const useHttpRequestService = () => {
   };
 
   const unfollowUser = async (userId: string) => {
-    const res = await axiosInstance.post(`${url}/follower/unfollow/${userId}`);
+    const res = await axiosInstance.delete(
+      `${url}/follower/unfollow/${userId}`
+    );
     if (res.status === 200) {
       return res.data;
     }
@@ -223,7 +226,7 @@ const useHttpRequestService = () => {
   };
 
   const getProfile = async (id: string) => {
-    const res = await axiosInstance.get(`${url}/user/${id}`);
+    const res = await axiosInstance.get(`${url}/user/byUserId/${id}`);
     if (res.status === 200) {
       return res.data;
     }
@@ -272,15 +275,28 @@ const useHttpRequestService = () => {
   };
 
   const getProfileView = async (id: string) => {
-    const res = await axiosInstance.get(`${url}/user/${id}`);
-
+    const res = await axiosInstance.get(`${url}/user/byUserId/${id}`);
+    console.log("data", res.data);
     if (res.status === 200) {
       return res.data;
     }
   };
 
+  const getFollowedPosts = async (query?: string) => {
+    try {
+      const res = await axiosInstance.get(
+        `${url}/post/following${query || ""}`
+      );
+      if (res.status === 200) {
+        return res.data;
+      }
+    } catch (e) {
+      handleNotFound(e);
+    }
+  };
+
   const deleteProfile = async () => {
-    const res = await axiosInstance.delete(`${url}/user/me`);
+    const res = await axiosInstance.delete(`${url}/user`);
 
     if (res.status === 204) {
       localStorage.removeItem("token");
@@ -375,6 +391,7 @@ const useHttpRequestService = () => {
     unfollowUser,
     searchUsers,
     getProfile,
+    getFollowedPosts,
     getPaginatedPostsFromProfile,
     getPostsFromProfile,
     isLogged,

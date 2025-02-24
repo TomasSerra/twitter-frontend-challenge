@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import { StyledToastContainer } from "./ToastContainer";
 import { AlertIcon } from "../icon/Icon";
 import { LightTheme } from "../../util/LightTheme";
@@ -45,17 +46,20 @@ const Toast = ({
     [ToastType.INFO]: null,
   };
 
-  return isShown ? (
-    <StyledToastContainer
-      type={type}
-      onClick={handleClose}
-      position={position}
-      theme={LightTheme}
-    >
-      {iconMap[type] || null}
-      <p>{message}</p>
-    </StyledToastContainer>
-  ) : null;
+  return ReactDOM.createPortal(
+    isShown ? (
+      <StyledToastContainer
+        type={type}
+        onClick={handleClose}
+        position={position}
+        theme={LightTheme}
+      >
+        {iconMap[type] || null}
+        <p>{message}</p>
+      </StyledToastContainer>
+    ) : null,
+    document.getElementById("portal") as HTMLElement
+  );
 };
 
 export default Toast;

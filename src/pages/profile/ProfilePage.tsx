@@ -136,9 +136,9 @@ const ProfilePage = () => {
                 flexDirection={"row"}
               >
                 <ProfileInfo
-                  name={profile!.name!}
-                  username={profile!.username}
-                  profilePicture={profile!.profilePicture}
+                  name={profile?.name}
+                  username={profile?.username}
+                  profilePicture={profile?.profilePicture}
                 />
                 <Button
                   buttonType={handleButtonType().component.type}
@@ -151,7 +151,7 @@ const ProfilePage = () => {
               </StyledContainer>
             </StyledContainer>
             <StyledContainer width={"100%"}>
-              {!profile.private ? (
+              {!profile.private || profile?.id === me?.id || following ? (
                 <ProfileFeed />
               ) : (
                 <StyledH5>Private account</StyledH5>

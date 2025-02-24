@@ -30,7 +30,6 @@ export const useGetFeed = () => {
         const query = `?skip=${page * 6}&limit=6`;
         const res = await getPosts(query);
         const safeRes = Array.isArray(res) ? res : [];
-        console.log(safeRes);
 
         dispatch(updateFeed([...posts, ...safeRes]));
         dispatch(setLength(posts.length + safeRes.length));

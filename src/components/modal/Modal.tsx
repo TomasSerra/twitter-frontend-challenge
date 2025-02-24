@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import ReactDOM from "react-dom";
 import { StyledBlurredBackground } from "../common/BlurredBackground";
 import Button from "../button/Button";
 import { ButtonColor, ButtonSize, ButtonType } from "../button/StyledButton";
@@ -23,7 +24,7 @@ const Modal = ({
   img,
   title,
 }: ModalProps) => {
-  return (
+  return ReactDOM.createPortal(
     <>
       {show && (
         <StyledBlurredBackground onClick={onClose}>
@@ -60,7 +61,8 @@ const Modal = ({
           </StyledModalContainer>
         </StyledBlurredBackground>
       )}
-    </>
+    </>,
+    document.getElementById("portal") as HTMLElement
   );
 };
 
