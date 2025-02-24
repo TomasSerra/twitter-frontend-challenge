@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import { StyledTweetContainer } from "./TweetContainer";
 import AuthorData from "./user-post-data/AuthorData";
 import type { Post } from "../../service";
@@ -16,9 +16,10 @@ import { useMe } from "../../hooks/useMe";
 
 interface TweetProps {
   post: Post;
+  ref?: any;
 }
 
-const Tweet = ({ post }: TweetProps) => {
+const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
   const [actualPost, setActualPost] = useState<Post>(post);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showCommentModal, setShowCommentModal] = useState<boolean>(false);
@@ -49,7 +50,7 @@ const Tweet = ({ post }: TweetProps) => {
   };
 
   return (
-    <StyledTweetContainer>
+    <StyledTweetContainer ref={ref}>
       <StyledContainer
         style={{ width: "100%" }}
         flexDirection={"row"}
@@ -123,6 +124,6 @@ const Tweet = ({ post }: TweetProps) => {
       />
     </StyledTweetContainer>
   );
-};
+});
 
 export default Tweet;

@@ -12,7 +12,12 @@ const CommentFeed = ({ postId }: CommentFeedProps) => {
 
   return (
     <>
-      <Feed posts={posts} loading={loading} />
+      <Feed
+        posts={posts}
+        loading={loading}
+        hasMore={false}
+        setPage={() => {}}
+      />
     </>
   );
 };
