@@ -109,7 +109,7 @@ const ProfilePage = () => {
   const getProfileData = async () => {
     getProfileView(id)
       .then((res) => {
-        setProfile({ ...res.user, private: !res.isPublic });
+        setProfile({ ...res.user });
         setFollowing(res.isFollowing);
       })
       .catch(() => {});

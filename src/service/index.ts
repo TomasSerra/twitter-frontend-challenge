@@ -26,9 +26,9 @@ export interface Post {
   authorId: string;
   author: Author;
   reactions: Reaction[];
-  comments: Post[];
+  comments: any[];
   likes: any[];
-  retweets: Post[];
+  retweets: any[];
 }
 
 export interface Reaction {
@@ -54,7 +54,6 @@ export interface User {
   username: string;
   profilePicture?: string;
   private: boolean;
-  createdAt: Date;
   followers: Author[];
   following: Author[];
   posts: Post[];

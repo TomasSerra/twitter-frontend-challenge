@@ -43,7 +43,7 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
 
   const handleSubmit = async () => {
     try {
-      await createPost({ content, images }).then(async (res) => {
+      await createPost({ content, images, parentId }).then(async (res) => {
         showToast(ToastType.SUCCESS, t("toast.post.create.success"));
         setContent("");
         setImages([]);
