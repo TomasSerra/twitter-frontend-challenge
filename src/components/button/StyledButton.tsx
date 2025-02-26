@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import "@fontsource/manrope";
 
 interface ButtonProps {
   size: ButtonSize;

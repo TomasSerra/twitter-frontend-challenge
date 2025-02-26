@@ -1,0 +1,423 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TweetBox component TweetBox component renders correctly on PC 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="sc-ispOId eotdWM"
+      >
+        <div
+          class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+          style="width: 100%;"
+        >
+          <div
+            class="sc-ewnqHT cJfwNi"
+          >
+            <div
+              class="sc-gTRrQi bFBxc"
+            >
+              <img
+                alt="Icon"
+                src="mockedProfilePic.jpg"
+              />
+            </div>
+            <textarea
+              class="sc-fFGjHI jcvhjS"
+              maxlength="240"
+              placeholder="placeholder.tweet"
+            />
+          </div>
+          <div
+            class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+            style="padding: 0px 0px 0px 10%;"
+          >
+            <div
+              data-testid="image-container"
+            />
+          </div>
+          <div
+            class="sc-kcuKUB ljiXJx"
+          >
+            <div
+              class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+              cursor="pointer"
+              style="justify-content: center; padding: 5px 10px; cursor: pointer;"
+              width="fit-content"
+            >
+              <label
+                for="image-upload-"
+                style="cursor: pointer;"
+              >
+                <img
+                  alt="Upload Images"
+                  src="test-image.png"
+                />
+              </label>
+              <input
+                accept="image/*"
+                id="image-upload-"
+                multiple=""
+                style="display: none;"
+                type="file"
+              />
+            </div>
+            <button
+              class="sc-bgqQcB jXgpsi"
+              data-testid="tweet-button"
+              disabled=""
+            >
+              <span>
+                Tweet
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="sc-ispOId eotdWM"
+    >
+      <div
+        class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+        style="width: 100%;"
+      >
+        <div
+          class="sc-ewnqHT cJfwNi"
+        >
+          <div
+            class="sc-gTRrQi bFBxc"
+          >
+            <img
+              alt="Icon"
+              src="mockedProfilePic.jpg"
+            />
+          </div>
+          <textarea
+            class="sc-fFGjHI jcvhjS"
+            maxlength="240"
+            placeholder="placeholder.tweet"
+          />
+        </div>
+        <div
+          class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+          style="padding: 0px 0px 0px 10%;"
+        >
+          <div
+            data-testid="image-container"
+          />
+        </div>
+        <div
+          class="sc-kcuKUB ljiXJx"
+        >
+          <div
+            class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+            cursor="pointer"
+            style="justify-content: center; padding: 5px 10px; cursor: pointer;"
+            width="fit-content"
+          >
+            <label
+              for="image-upload-"
+              style="cursor: pointer;"
+            >
+              <img
+                alt="Upload Images"
+                src="test-image.png"
+              />
+            </label>
+            <input
+              accept="image/*"
+              id="image-upload-"
+              multiple=""
+              style="display: none;"
+              type="file"
+            />
+          </div>
+          <button
+            class="sc-bgqQcB jXgpsi"
+            data-testid="tweet-button"
+            disabled=""
+          >
+            <span>
+              Tweet
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`TweetBox component TweetBox component renders correctly on mobile 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="sc-ispOId eotdWM"
+      >
+        <div
+          class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+          style="flex-direction: row; justify-content: space-between; align-items: center;"
+        >
+          <div
+            data-testid="back-arrow-icon"
+          />
+          <button
+            class="sc-bgqQcB jXgpsi"
+            data-testid="tweet-button-mobile"
+            disabled=""
+          >
+            <span>
+              Tweet
+            </span>
+          </button>
+        </div>
+        <div
+          class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+          style="width: 100%;"
+        >
+          <div
+            class="sc-ewnqHT cJfwNi"
+          >
+            <div
+              class="sc-gTRrQi bFBxc"
+            >
+              <img
+                alt="Icon"
+                src="mockedProfilePic.jpg"
+              />
+            </div>
+            <textarea
+              class="sc-fFGjHI jcvhjS"
+              maxlength="240"
+              placeholder="placeholder.tweet"
+            />
+          </div>
+          <div
+            class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+            style="padding: 0px 0px 0px 10%;"
+          >
+            <div
+              data-testid="image-container"
+            />
+          </div>
+          <div
+            class="sc-kcuKUB ljiXJx"
+          >
+            <div
+              class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+              cursor="pointer"
+              style="justify-content: center; padding: 5px 10px; cursor: pointer;"
+              width="fit-content"
+            >
+              <label
+                for="image-upload-"
+                style="cursor: pointer;"
+              >
+                <img
+                  alt="Upload Images"
+                  src="test-image.png"
+                />
+              </label>
+              <input
+                accept="image/*"
+                id="image-upload-"
+                multiple=""
+                style="display: none;"
+                type="file"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="sc-ispOId eotdWM"
+    >
+      <div
+        class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+        style="flex-direction: row; justify-content: space-between; align-items: center;"
+      >
+        <div
+          data-testid="back-arrow-icon"
+        />
+        <button
+          class="sc-bgqQcB jXgpsi"
+          data-testid="tweet-button-mobile"
+          disabled=""
+        >
+          <span>
+            Tweet
+          </span>
+        </button>
+      </div>
+      <div
+        class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+        style="width: 100%;"
+      >
+        <div
+          class="sc-ewnqHT cJfwNi"
+        >
+          <div
+            class="sc-gTRrQi bFBxc"
+          >
+            <img
+              alt="Icon"
+              src="mockedProfilePic.jpg"
+            />
+          </div>
+          <textarea
+            class="sc-fFGjHI jcvhjS"
+            maxlength="240"
+            placeholder="placeholder.tweet"
+          />
+        </div>
+        <div
+          class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+          style="padding: 0px 0px 0px 10%;"
+        >
+          <div
+            data-testid="image-container"
+          />
+        </div>
+        <div
+          class="sc-kcuKUB ljiXJx"
+        >
+          <div
+            class="sc-dicizt sc-iVCKna IPeKc dAgTYq"
+            cursor="pointer"
+            style="justify-content: center; padding: 5px 10px; cursor: pointer;"
+            width="fit-content"
+          >
+            <label
+              for="image-upload-"
+              style="cursor: pointer;"
+            >
+              <img
+                alt="Upload Images"
+                src="test-image.png"
+              />
+            </label>
+            <input
+              accept="image/*"
+              id="image-upload-"
+              multiple=""
+              style="display: none;"
+              type="file"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

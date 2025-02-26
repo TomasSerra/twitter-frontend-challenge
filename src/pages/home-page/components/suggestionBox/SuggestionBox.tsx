@@ -21,7 +21,7 @@ const SuggestionBox = () => {
   useEffect(() => {
     try {
       getRecommendedUsers(6, 0).then((res) => {
-        setUsers(res?.users || []);
+        setUsers(res || []);
       });
     } catch (e) {
       console.log(e);

@@ -10,6 +10,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size: ButtonSize;
   buttonType?: ButtonType;
   buttonColor?: ButtonColor;
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -17,6 +18,7 @@ const Button = ({
   size,
   buttonType = ButtonType.FULFILLED,
   buttonColor = ButtonColor.PRIMARY,
+  disabled = false,
   ...props
 }: ButtonProps) => {
   return (
@@ -24,6 +26,7 @@ const Button = ({
       size={size}
       buttonType={buttonType}
       buttonColor={buttonColor}
+      disabled={disabled}
       {...props}
     >
       <span>{children}</span>

@@ -91,7 +91,10 @@ const useHttpRequestService = () => {
         content: data.content,
         images: data.images?.map((image) => image.name),
       };
-      const res = await axiosInstance.post(`${url}/post`, uploadData);
+      const res = await axiosInstance.post(
+        `${url}/post?parentId=${data.parentId || ""}`,
+        uploadData
+      );
       if (res.status === 201) {
         const { upload } = S3Service;
         for (const imageUrl of res.data.images) {

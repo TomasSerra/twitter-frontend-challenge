@@ -54,7 +54,7 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
         close && close();
       });
     } catch (e) {
-      showToast(ToastType.SUCCESS, t("toast.post.create.error"));
+      showToast(ToastType.ALERT, t("toast.post.create.error"));
       console.error(e);
     }
   };
@@ -87,6 +87,7 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
             buttonColor={ButtonColor.PRIMARY}
             onClick={handleSubmit}
             disabled={content.length === 0}
+            data-testid="tweet-button-mobile"
           >
             Tweet
           </Button>
@@ -121,6 +122,7 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
                 images.length > 4 ||
                 images.length < 0
               }
+              data-testid="tweet-button"
             >
               Tweet
             </Button>
