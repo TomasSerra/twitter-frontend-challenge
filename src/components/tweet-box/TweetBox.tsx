@@ -15,23 +15,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { useMe } from "../../hooks/useMe";
 import { useToast } from "../toast/ToastContext";
 import { ToastType } from "../toast/Toast";
+import { useGetFeed } from "../../hooks/useGetFeed";
+import { useAppSelector } from "../../redux/hooks";
+import { Post } from "../../service";
 
 interface TweetBoxProps {
   parentId?: string;
   close?: () => void;
   mobile?: boolean;
   borderless?: boolean;
+  activePage?: boolean;
 }
 
-const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
+const TweetBox = ({
+  parentId,
+  close,
+  mobile,
+  activePage = true,
+}: TweetBoxProps) => {
   const [content, setContent] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
 
-  const { length, query } = useSelector(
-    (state: { user: { length: number; query: string } }) => state.user
-  );
-  const { createPost, getPosts } = useHttpRequestService();
+  const posts = useAppSelector((state) => state.user.feed) || [];
+  const { createPost } = useHttpRequestService();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { data: user } = useMe();
@@ -48,9 +55,8 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
         setContent("");
         setImages([]);
         setImagesPreview([]);
-        dispatch(setLength(length + 1));
-        const posts = await getPosts(query);
-        dispatch(updateFeed(posts));
+        dispatch(updateFeed([res, ...posts]));
+        dispatch(setLength(posts.length + 1));
         close && close();
       });
     } catch (e) {

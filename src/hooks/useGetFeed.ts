@@ -39,7 +39,7 @@ export const useGetFeed = (activePage: boolean) => {
     try {
       setLoading(true);
       setError(false);
-      const query = `?skip=${page * LIMIT}&limit=${LIMIT}`;
+      const query = `?skip=${posts.length}&limit=${LIMIT}`;
       const res = activePage
         ? await getPosts(query)
         : await getFollowedPosts(query);
