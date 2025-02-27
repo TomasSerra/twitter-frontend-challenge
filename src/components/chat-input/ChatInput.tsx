@@ -3,9 +3,29 @@ import { StyledContainer } from "../common/Container";
 import Button from "../button/Button";
 import { ButtonColor, ButtonSize, ButtonType } from "../button/StyledButton";
 import { StyledInput } from "./StyledInput";
+import { Socket } from "socket.io-client";
 
-const ChatInput = () => {
+const ChatInput = ({
+  toUserId,
+  socket,
+}: {
+  toUserId: string;
+  socket: Socket;
+}) => {
   const [message, setMessage] = useState("");
+
+  const sendMessage = () => {
+    socket.connect();
+    socket.emit("join room", { receiverId: toUserId });
+    if (message.trim()) {
+      console.log("id", toUserId);
+      socket.emit("chat message", {
+        msg: message,
+        receiverId: toUserId,
+      });
+      setMessage("");
+    }
+  };
 
   return (
     <StyledContainer
@@ -28,6 +48,7 @@ const ChatInput = () => {
         size={ButtonSize.SMALL}
         buttonType={ButtonType.FULFILLED}
         buttonColor={ButtonColor.PRIMARY}
+        onClick={sendMessage}
       >
         Send
       </Button>

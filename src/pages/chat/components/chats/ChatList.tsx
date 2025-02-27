@@ -1,35 +1,42 @@
 import { useEffect, useState } from "react";
 import Chat from "../../../../components/chats/Chat";
 import { User } from "../../../../service";
-import useHttpRequestService from "../../../../service/useHttpRequestService";
 import { StyledContainer } from "../../../../components/common/Container";
+import { Socket } from "socket.io-client";
 
 type ChatType = {
   senderId: string;
   content: string;
+  createdAt: string;
 };
 
 interface ChatListProps {
   toUserData: User;
   meData: User;
+  socket: Socket;
 }
 
-const ChatList = ({ toUserData, meData }: ChatListProps) => {
+const ChatList = ({ toUserData, meData, socket }: ChatListProps) => {
   const [chats, setChats] = useState<ChatType[]>([]);
-  const { getChats } = useHttpRequestService();
 
   useEffect(() => {
-    setChats([
-      {
-        senderId: "1",
-        content: "Hola Tomas, como estas?",
-      },
-      {
-        senderId: "4dc9d119-c9bc-44be-9738-aef1cded728b",
-        content: "Hola pepe, todo bien vos?",
-      },
-    ]);
-  }, [toUserData]);
+    socket.connect();
+    socket.emit("join room", { receiverId: toUserData.id });
+    socket.emit("bring room", { receiverId: toUserData.id });
+    socket.on(
+      "chat message",
+      (msg: string, createdAt: string, senderId: string) => {
+        setChats((prevChats) => [
+          ...prevChats,
+          { senderId, content: msg, createdAt },
+        ]);
+      }
+    );
+
+    return () => {
+      socket.off("chat message");
+    };
+  }, []);
 
   return (
     <>

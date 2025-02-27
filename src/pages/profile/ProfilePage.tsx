@@ -72,6 +72,10 @@ const ProfilePage = () => {
     }
   };
 
+  const handleChat = () => {
+    navigate(`/chat/${profile?.id}`);
+  };
+
   useEffect(() => {
     getProfileData().then();
   }, [id]);
@@ -140,14 +144,33 @@ const ProfilePage = () => {
                   username={profile?.username}
                   profilePicture={profile?.profilePicture}
                 />
-                <Button
-                  buttonType={handleButtonType().component.type}
-                  buttonColor={handleButtonType().component.color}
-                  size={ButtonSize.MEDIUM}
-                  onClick={handleButtonAction}
+                <StyledContainer
+                  display="flex"
+                  flexDirection="column"
+                  alignItems={"center"}
+                  justifyContent={"flex-start"}
+                  width={"fit-content"}
                 >
-                  {handleButtonType().text}
-                </Button>
+                  <Button
+                    buttonType={handleButtonType().component.type}
+                    buttonColor={handleButtonType().component.color}
+                    size={ButtonSize.MEDIUM}
+                    onClick={handleButtonAction}
+                  >
+                    {handleButtonType().text}
+                  </Button>
+                  {(!profile.private || following) &&
+                    profile?.id !== me?.id && (
+                      <Button
+                        buttonType={ButtonType.OUTLINED}
+                        buttonColor={ButtonColor.WHITE}
+                        size={ButtonSize.MEDIUM}
+                        onClick={handleChat}
+                      >
+                        Chat
+                      </Button>
+                    )}
+                </StyledContainer>
               </StyledContainer>
             </StyledContainer>
             <StyledContainer width={"100%"}>
