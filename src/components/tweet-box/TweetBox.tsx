@@ -11,31 +11,24 @@ import { ButtonColor, ButtonSize, ButtonType } from "../button/StyledButton";
 import { StyledTweetBoxContainer } from "./TweetBoxContainer";
 import { StyledContainer } from "../common/Container";
 import { StyledButtonContainer } from "./ButtonContainer";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useMe } from "../../hooks/useMe";
 import { useToast } from "../toast/ToastContext";
 import { ToastType } from "../toast/Toast";
-import { useGetFeed } from "../../hooks/useGetFeed";
 import { useAppSelector } from "../../redux/hooks";
-import { Post } from "../../service";
 
 interface TweetBoxProps {
   parentId?: string;
   close?: () => void;
   mobile?: boolean;
   borderless?: boolean;
-  activePage?: boolean;
 }
 
-const TweetBox = ({
-  parentId,
-  close,
-  mobile,
-  activePage = true,
-}: TweetBoxProps) => {
+const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
   const [content, setContent] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const posts = useAppSelector((state) => state.user.feed) || [];
   const { createPost } = useHttpRequestService();
@@ -50,7 +43,9 @@ const TweetBox = ({
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       await createPost({ content, images, parentId }).then(async (res) => {
+        setLoading(false);
         showToast(ToastType.SUCCESS, t("toast.post.create.success"));
         setContent("");
         setImages([]);
@@ -60,6 +55,7 @@ const TweetBox = ({
         close && close();
       });
     } catch (e) {
+      setLoading(false);
       showToast(ToastType.ALERT, t("toast.post.create.error"));
       console.error(e);
     }
@@ -92,7 +88,7 @@ const TweetBox = ({
             size={ButtonSize.SMALL}
             buttonColor={ButtonColor.PRIMARY}
             onClick={handleSubmit}
-            disabled={content.length === 0}
+            disabled={content.length === 0 || loading}
             data-testid="tweet-button-mobile"
           >
             Tweet
@@ -126,7 +122,8 @@ const TweetBox = ({
                 content.length <= 0 ||
                 content.length > 240 ||
                 images.length > 4 ||
-                images.length < 0
+                images.length < 0 ||
+                loading
               }
               data-testid="tweet-button"
             >

@@ -57,6 +57,7 @@ exports[`TweetBox component TweetBox component renders correctly on PC 1`] = `
               </label>
               <input
                 accept="image/*"
+                data-testid="image-input"
                 id="image-upload-"
                 multiple=""
                 style="display: none;"
@@ -130,6 +131,7 @@ exports[`TweetBox component TweetBox component renders correctly on PC 1`] = `
             </label>
             <input
               accept="image/*"
+              data-testid="image-input"
               id="image-upload-"
               multiple=""
               style="display: none;"
@@ -277,6 +279,7 @@ exports[`TweetBox component TweetBox component renders correctly on mobile 1`] =
               </label>
               <input
                 accept="image/*"
+                data-testid="image-input"
                 id="image-upload-"
                 multiple=""
                 style="display: none;"
@@ -358,6 +361,7 @@ exports[`TweetBox component TweetBox component renders correctly on mobile 1`] =
             </label>
             <input
               accept="image/*"
+              data-testid="image-input"
               id="image-upload-"
               multiple=""
               style="display: none;"

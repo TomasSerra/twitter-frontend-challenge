@@ -39,6 +39,7 @@ const ImageInput = ({ setImages, parentId }: ImageInputProps) => {
         ref={fileInputRef}
         onChange={handleImageUpload}
         style={{ display: "none" }}
+        data-testid="image-input"
       />
     </StyledContainer>
   );

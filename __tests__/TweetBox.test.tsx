@@ -104,7 +104,7 @@ describe("TweetBox component", () => {
 
     (useHttpRequestService as jest.Mock).mockReturnValue({
       createPost: mockCreatePost,
-      getPosts: jest.fn(),
+      getPosts: jest.fn().mockResolvedValue([]),
     });
 
     (useToast as jest.Mock).mockReturnValue({
@@ -199,5 +199,70 @@ describe("TweetBox component", () => {
       ToastType.SUCCESS,
       "toast.post.create.success"
     );
+  });
+
+  test("should empty textarea when the tweet is submitted", async () => {
+    render(
+      <ThemeProvider theme={mockTheme}>
+        <TweetBox />
+      </ThemeProvider>
+    );
+
+    const input = screen.getByPlaceholderText("placeholder.tweet");
+
+    fireEvent.change(input, { target: { value: "Test tweet" } });
+
+    const button = screen.getByTestId("tweet-button");
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect((input as HTMLInputElement).value).toBe("");
+    });
+  });
+
+  test("should throw error in toast when the tweet is not submitted", async () => {
+    (useHttpRequestService as jest.Mock).mockReturnValue({
+      createPost: jest.fn().mockRejectedValue({}),
+      getPosts: jest.fn(),
+    });
+
+    render(
+      <ThemeProvider theme={mockTheme}>
+        <TweetBox />
+      </ThemeProvider>
+    );
+
+    const input = screen.getByPlaceholderText("placeholder.tweet");
+
+    fireEvent.change(input, { target: { value: "Test tweet" } });
+
+    const button = screen.getByTestId("tweet-button");
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(mockShowToast).toHaveBeenCalledWith(
+        ToastType.ALERT,
+        "toast.post.create.error"
+      );
+    });
+  });
+
+  test("Should allow adding an image", async () => {
+    render(
+      <ThemeProvider theme={mockTheme}>
+        <TweetBox />
+      </ThemeProvider>
+    );
+
+    const file = new File(["image-content"], "test-tweet-image.png", {
+      type: "image/png",
+    });
+    const fileInput = screen.getByTestId("image-input");
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("tweet-image")).toBeInTheDocument();
+    });
   });
 });
