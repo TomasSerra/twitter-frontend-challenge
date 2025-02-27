@@ -6,7 +6,7 @@ import { StyledDot } from "../../common/Dot";
 import { useNavigate } from "react-router-dom";
 
 interface UserPostDataProps {
-  createdAt: Date;
+  createdAt?: Date;
   id: string;
   name: string;
   username: string;
@@ -25,6 +25,13 @@ const AuthorData = ({
     navigate(`/profile/${id}`);
   };
 
+  const date = () => {
+    if (!createdAt) return "";
+    return new Date(createdAt).toLocaleString("default", {
+      month: "short",
+      day: "numeric",
+    });
+  };
   return (
     <StyledAuthorDataContainer>
       <Avatar
@@ -35,12 +42,7 @@ const AuthorData = ({
       <p>{name}</p>
       <p className={"username"}>{"@" + username}</p>
       <StyledDot />
-      <p className={"username"}>
-        {new Date(createdAt).toLocaleString("default", {
-          month: "short",
-          day: "numeric",
-        })}
-      </p>
+      <p className={"username"}>{date()}</p>
     </StyledAuthorDataContainer>
   );
 };
