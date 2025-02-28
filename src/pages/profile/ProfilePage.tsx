@@ -159,17 +159,16 @@ const ProfilePage = () => {
                   >
                     {handleButtonType().text}
                   </Button>
-                  {(!profile.private || following) &&
-                    profile?.id !== me?.id && (
-                      <Button
-                        buttonType={ButtonType.OUTLINED}
-                        buttonColor={ButtonColor.WHITE}
-                        size={ButtonSize.MEDIUM}
-                        onClick={handleChat}
-                      >
-                        Chat
-                      </Button>
-                    )}
+                  {following && profile?.id !== me?.id && (
+                    <Button
+                      buttonType={ButtonType.OUTLINED}
+                      buttonColor={ButtonColor.WHITE}
+                      size={ButtonSize.MEDIUM}
+                      onClick={handleChat}
+                    >
+                      Chat
+                    </Button>
+                  )}
                 </StyledContainer>
               </StyledContainer>
             </StyledContainer>

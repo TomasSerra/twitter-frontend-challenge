@@ -15,13 +15,12 @@ const ChatInput = ({
   const [message, setMessage] = useState("");
 
   const sendMessage = () => {
-    socket.connect();
     socket.emit("join room", { receiverId: toUserId });
     if (message.trim()) {
-      console.log("id", toUserId);
       socket.emit("chat message", {
         msg: message,
         receiverId: toUserId,
+        senderId: localStorage.getItem("token") || "",
       });
       setMessage("");
     }

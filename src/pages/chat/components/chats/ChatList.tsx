@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Chat from "../../../../components/chats/Chat";
 import { User } from "../../../../service";
 import { StyledContainer } from "../../../../components/common/Container";
@@ -18,9 +18,9 @@ interface ChatListProps {
 
 const ChatList = ({ toUserData, meData, socket }: ChatListProps) => {
   const [chats, setChats] = useState<ChatType[]>([]);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    socket.connect();
     socket.emit("join room", { receiverId: toUserData.id });
     socket.emit("bring room", { receiverId: toUserData.id });
     socket.on(
@@ -38,11 +38,16 @@ const ChatList = ({ toUserData, meData, socket }: ChatListProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView();
+  }, [chats]);
+
   return (
     <>
       {chats.map((chat, index) => {
-        const isMe = chat.senderId === meData.id;
-        const direction = isMe ? "flex-end" : "flex-start";
+        const isNotMe = chat.senderId === toUserData.id;
+        console.log(isNotMe);
+        const direction = isNotMe ? "flex-start" : "flex-end";
         return (
           <StyledContainer
             key={index}
@@ -50,12 +55,17 @@ const ChatList = ({ toUserData, meData, socket }: ChatListProps) => {
             flexDirection="row"
             justifyContent={direction}
             width="100%"
-            padding="15px"
+            padding="5px 20px"
           >
-            <Chat key={index} content={chat.content} isMe={isMe} />
+            <Chat
+              content={chat.content}
+              isMe={!isNotMe}
+              createdAt={chat.createdAt}
+            />
           </StyledContainer>
         );
       })}
+      <div ref={chatEndRef} />
     </>
   );
 };

@@ -25,7 +25,6 @@ const ProfileInfo = ({
       <StyledContainer justifyContent={"center"}>
         <StyledH5>{name ?? "Name"}</StyledH5>
         <StyledP primary={false}>{`@${username}`}</StyledP>
-        <StyledP primary={false}>Description...</StyledP>
       </StyledContainer>
     </StyledContainer>
   );

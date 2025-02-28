@@ -47,7 +47,12 @@ const ChatPage = () => {
       alignItems="center"
     >
       <Header toUserData={toUserData} isFollowing={isFollowing} />
-      <StyledContainer height="100%" width="100%" overflowY="auto">
+      <StyledContainer
+        height="100%"
+        width="100%"
+        overflowY="auto"
+        padding={"10px 0"}
+      >
         {toUserData && me && (
           <ChatList toUserData={toUserData} meData={me} socket={chatSocket} />
         )}
