@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Chat from "../../../../components/chats/Chat";
 import { User } from "../../../../service";
 import { StyledContainer } from "../../../../components/common/Container";
-import { Socket } from "socket.io-client";
+import { ChatSocket } from "../../../../hooks/useChat";
 
 type ChatType = {
   senderId: string;
@@ -13,7 +13,7 @@ type ChatType = {
 interface ChatListProps {
   toUserData: User;
   meData: User;
-  socket: Socket;
+  socket: ChatSocket;
 }
 
 const ChatList = ({ toUserData, meData, socket }: ChatListProps) => {
@@ -21,20 +21,23 @@ const ChatList = ({ toUserData, meData, socket }: ChatListProps) => {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    socket.emit("join room", { receiverId: toUserData.id });
-    socket.emit("bring room", { receiverId: toUserData.id });
-    socket.on(
-      "chat message",
-      (msg: string, createdAt: string, senderId: string) => {
-        setChats((prevChats) => [
-          ...prevChats,
-          { senderId, content: msg, createdAt },
-        ]);
-      }
-    );
+    socket.joinRoom(toUserData.id);
+    socket.getAllMessages(toUserData.id);
+    const handleMessage = (
+      msg: string,
+      createdAt: string,
+      senderId: string
+    ) => {
+      setChats((prevChats) => [
+        ...prevChats,
+        { senderId, content: msg, createdAt },
+      ]);
+    };
+
+    socket.onMessage(handleMessage);
 
     return () => {
-      socket.off("chat message");
+      socket.off();
     };
   }, []);
 
@@ -46,7 +49,6 @@ const ChatList = ({ toUserData, meData, socket }: ChatListProps) => {
     <>
       {chats.map((chat, index) => {
         const isNotMe = chat.senderId === toUserData.id;
-        console.log(isNotMe);
         const direction = isNotMe ? "flex-start" : "flex-end";
         return (
           <StyledContainer

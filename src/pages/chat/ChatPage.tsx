@@ -7,7 +7,7 @@ import { useMe } from "../../hooks/useMe";
 import { User } from "../../service";
 import ChatInput from "../../components/chat-input/ChatInput";
 import ChatList from "./components/chats/ChatList";
-import socket from "../../service/socketService";
+import useChat from "../../hooks/useChat";
 
 const ChatPage = () => {
   const toUserId = useParams().id || "";
@@ -15,15 +15,14 @@ const ChatPage = () => {
   const { data: me } = useMe();
   const [toUserData, setToUserData] = useState<User>();
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
-  const token: string = localStorage.getItem("token")?.split(" ")[1] || "";
-  const chatSocket = socket({ token });
+  const chatSocket = useChat();
 
   useEffect(() => {
     chatSocket.connect();
-    chatSocket.emit("join room", { receiverId: toUserId });
+    chatSocket.joinRoom(toUserId);
 
     return () => {
-      chatSocket.emit("leave room", { receiverId: toUserId });
+      chatSocket.leaveRoom(toUserId);
       chatSocket.disconnect();
     };
   }, []);

@@ -3,25 +3,21 @@ import { StyledContainer } from "../common/Container";
 import Button from "../button/Button";
 import { ButtonColor, ButtonSize, ButtonType } from "../button/StyledButton";
 import { StyledInput } from "./StyledInput";
-import { Socket } from "socket.io-client";
+import { ChatSocket } from "../../hooks/useChat";
 
 const ChatInput = ({
   toUserId,
   socket,
 }: {
   toUserId: string;
-  socket: Socket;
+  socket: ChatSocket;
 }) => {
   const [message, setMessage] = useState("");
 
   const sendMessage = () => {
-    socket.emit("join room", { receiverId: toUserId });
+    socket.joinRoom(toUserId);
     if (message.trim()) {
-      socket.emit("chat message", {
-        msg: message,
-        receiverId: toUserId,
-        senderId: localStorage.getItem("token") || "",
-      });
+      socket.sendMessage(message, toUserId);
       setMessage("");
     }
   };
