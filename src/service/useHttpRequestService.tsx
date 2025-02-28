@@ -97,10 +97,10 @@ const useHttpRequestService = () => {
       );
       if (res.status === 201) {
         const { upload } = S3Service;
-        for (const imageUrl of res.data.images) {
-          const index: number = res.data.images.indexOf(imageUrl);
-          console.log(imageUrl);
-          await upload(data.images![index], imageUrl);
+        let i = 0;
+        for (const imageUrl of res.data.imageUploadUrls) {
+          await upload(data.images![i], imageUrl);
+          i++;
         }
         return res.data;
       }

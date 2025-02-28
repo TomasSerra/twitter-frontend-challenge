@@ -50,7 +50,7 @@ const TweetBox = ({ parentId, close, mobile }: TweetBoxProps) => {
         setContent("");
         setImages([]);
         setImagesPreview([]);
-        dispatch(updateFeed([res, ...posts]));
+        dispatch(updateFeed([res.post, ...posts]));
         dispatch(setLength(posts.length + 1));
         close && close();
       });

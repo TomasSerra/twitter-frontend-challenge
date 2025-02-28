@@ -42,7 +42,7 @@ const Toast = ({
   const iconMap = {
     [ToastType.ALERT]: <AlertIcon />,
     [ToastType.SUCCESS]: null,
-    [ToastType.WARNING]: null,
+    [ToastType.WARNING]: <AlertIcon />,
     [ToastType.INFO]: null,
   };
 

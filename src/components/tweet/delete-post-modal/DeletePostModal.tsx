@@ -30,10 +30,10 @@ export const DeletePostModal = ({
   const { t } = useTranslation();
   const { showToast } = useToast();
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     try {
       showToast(ToastType.SUCCESS, t("toast.post.delete.success"));
-      deletePost(id).then((res) => console.log(res));
+      await deletePost(id);
       const newFeed = feed.filter((post: Post) => post.id !== id);
       dispatch(updateFeed(newFeed));
       handleClose();

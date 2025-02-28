@@ -77,7 +77,7 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
           createdAt={post?.createdAt}
           profilePicture={post?.author?.profilePicture}
         />
-        {post.authorId === user?.id && (
+        {post?.authorId === user?.id && (
           <>
             <DeletePostModal
               show={showDeleteModal}
@@ -105,7 +105,7 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
       <StyledReactionsContainer>
         <Reaction
           img={IconType.CHAT}
-          count={actualPost.comments?.length ?? 0}
+          count={actualPost?.comments?.length ?? 0}
           reactionFunction={() =>
             window.innerWidth > 600
               ? setShowCommentModal(true)
@@ -116,14 +116,14 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
         />
         <Reaction
           img={IconType.RETWEET}
-          count={actualPost.retweets?.length ?? 0}
+          count={actualPost?.retweets?.length ?? 0}
           reactionFunction={() => handleRetweet()}
           increment={1}
           reacted={hasRetweeted()}
         />
         <Reaction
           img={IconType.LIKE}
-          count={actualPost.likes?.length ?? 0}
+          count={actualPost?.likes?.length ?? 0}
           reactionFunction={() => handleLike()}
           increment={1}
           reacted={hasLiked()}

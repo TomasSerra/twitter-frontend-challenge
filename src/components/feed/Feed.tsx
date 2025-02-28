@@ -37,13 +37,13 @@ const Feed = ({ posts, loading, setPage, hasMore }: FeedProps) => {
       {posts
         ?.filter(
           (post, index, self) =>
-            self.findIndex((p) => p.id === post.id) === index
+            self.findIndex((p) => p?.id === post?.id) === index
         )
         .map((post, index) => {
           if (index === posts.length - 1) {
-            return <Tweet key={post.id} post={post} ref={lastPostRef} />;
+            return <Tweet key={post?.id} post={post} ref={lastPostRef} />;
           }
-          return <Tweet key={post.id} post={post} />;
+          return <Tweet key={post?.id} post={post} />;
         })}
 
       {loading && <Loader />}

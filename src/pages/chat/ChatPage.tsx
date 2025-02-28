@@ -8,6 +8,7 @@ import { User } from "../../service";
 import ChatInput from "../../components/chat-input/ChatInput";
 import ChatList from "./components/chats/ChatList";
 import useChat from "../../hooks/useChat";
+import { StyledChatPageContainer } from "./StyledChatPageContainer";
 
 const ChatPage = () => {
   const toUserId = useParams().id || "";
@@ -35,16 +36,7 @@ const ChatPage = () => {
   }, [toUserId]);
 
   return (
-    <StyledContainer
-      height="100vh"
-      borderRight="1px solid #ebeef0"
-      maxWidth="700px"
-      overflowY="auto"
-      display="flex"
-      flexDirection="column"
-      justifyContent="space-between"
-      alignItems="center"
-    >
+    <StyledChatPageContainer>
       <Header toUserData={toUserData} isFollowing={isFollowing} />
       <StyledContainer
         height="100%"
@@ -59,7 +51,7 @@ const ChatPage = () => {
       <StyledContainer height={"fit-content"} width={"100%"}>
         <ChatInput toUserId={toUserId} socket={chatSocket} />
       </StyledContainer>
-    </StyledContainer>
+    </StyledChatPageContainer>
   );
 };
 
