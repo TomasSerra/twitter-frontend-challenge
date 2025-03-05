@@ -87,7 +87,7 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
               }}
             />
             <ThreeDots
-              onClick={() => {
+              onClick={(event) => {
                 setShowDeleteModal(!showDeleteModal);
               }}
             />

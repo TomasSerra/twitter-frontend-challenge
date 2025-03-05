@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { StyledToastContainer } from "./ToastContainer";
 import { AlertIcon } from "../icon/Icon";
-import { LightTheme } from "../../util/LightTheme";
 
 export enum ToastType {
   ALERT = "ALERT",
@@ -52,7 +51,6 @@ const Toast = ({
         type={type}
         onClick={handleClose}
         position={position}
-        theme={LightTheme}
       >
         {iconMap[type] || null}
         <p>{message}</p>

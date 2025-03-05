@@ -1,9 +1,6 @@
 import LogoutPrompt from "../navbar/logout-prompt/LogoutPrompt";
-import {
-  StyledLogoutPrompt,
-  StyledProfileLogoutPromptContainer,
-} from "./StyledProfileLogoutPromptContainer";
-import React, { useState } from "react";
+import { StyledProfileLogoutPromptContainer } from "./StyledProfileLogoutPromptContainer";
+import { useState } from "react";
 import icon from "../../assets/icon.jpg";
 import { StyledP } from "../common/text";
 import { StyledContainer } from "../common/Container";
@@ -21,12 +18,8 @@ const ProfileLogoutPrompt = ({
   const [logoutOpen, setLogoutOpen] = useState(false);
   const { data: user } = useMe();
 
-  const handleLogout = () => {
+  const handleClick = () => {
     setLogoutOpen(!logoutOpen);
-  };
-
-  const handleButtonClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
   };
 
   return (
@@ -36,19 +29,18 @@ const ProfileLogoutPrompt = ({
       className={"profile-info"}
       alignItems={"center"}
       gap={"8px"}
-      onClick={handleLogout}
+      onMouseDown={handleClick}
       cursor={"pointer"}
+      position="relative"
     >
       <StyledProfileLogoutPromptContainer direction={direction}>
         <img src={user?.profilePicture ?? icon} className="icon" alt="Icon" />
-        {logoutOpen && (
-          <StyledLogoutPrompt
-            margin={margin}
-            onClick={(event) => handleButtonClick(event)}
-          >
-            <LogoutPrompt show={logoutOpen} user={user} />
-          </StyledLogoutPrompt>
-        )}
+        <LogoutPrompt
+          show={logoutOpen}
+          user={user}
+          margin={margin}
+          onClose={() => setLogoutOpen(false)}
+        />
       </StyledProfileLogoutPromptContainer>
       <StyledContainer padding={"4px 0"} gap={"4px"} className={"user-info"}>
         <StyledP primary>{user?.name}</StyledP>
