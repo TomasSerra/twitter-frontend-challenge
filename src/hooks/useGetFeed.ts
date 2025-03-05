@@ -50,9 +50,9 @@ export const useGetFeed = (activePage: boolean) => {
 
       setHasMore(safeRes.length === LIMIT);
       setLoading(false);
-    } catch (e) {
+    } catch (error) {
       setError(true);
-      console.log(e);
+      console.log(error);
     }
   };
 
