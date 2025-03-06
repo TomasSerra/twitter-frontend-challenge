@@ -23,30 +23,42 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
   const [actualPost, setActualPost] = useState<Post>(post);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showCommentModal, setShowCommentModal] = useState<boolean>(false);
-  const { deleteReaction, createReaction, getPostById } =
+  const { likePost, unlikePost, retweetPost, deleteRetweetPost, getPostById } =
     useHttpRequestService();
   const navigate = useNavigate();
   const { data: user } = useMe();
 
-  const handleReaction = async (type: string) => {
-    const reacted = actualPost?.reactions?.find(
-      (r) => r.action === type && r.authorId === user?.id
-    );
+  const handleLike = async () => {
+    const reacted = hasLiked();
     if (reacted) {
-      await deleteReaction(actualPost?.id, type).then(() => {
+      await unlikePost(actualPost?.id).then(() => {
         getPostById(actualPost?.id).then((res) => setActualPost(res));
       });
     } else {
-      await createReaction(actualPost?.id, type).then(() => {
+      await likePost(actualPost?.id).then(() => {
+        getPostById(actualPost?.id).then((res) => setActualPost(res));
+      });
+    }
+  };
+  const handleRetweet = async () => {
+    const reacted = hasRetweeted();
+    if (reacted) {
+      await deleteRetweetPost(actualPost?.id).then(() => {
+        getPostById(actualPost?.id).then((res) => setActualPost(res));
+      });
+    } else {
+      await retweetPost(actualPost?.id).then(() => {
         getPostById(actualPost?.id).then((res) => setActualPost(res));
       });
     }
   };
 
-  const hasReactedByType = (type: string): boolean => {
-    return actualPost?.reactions?.some((r) => {
-      return r.action === type && r.authorId === user?.id;
-    });
+  const hasLiked = (): boolean => {
+    return actualPost?.likes?.find((r) => r.userId === user?.id);
+  };
+
+  const hasRetweeted = (): boolean => {
+    return actualPost?.retweets?.find((r) => r.userId === user?.id);
   };
 
   return (
@@ -65,7 +77,7 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
           createdAt={post?.createdAt}
           profilePicture={post?.author?.profilePicture}
         />
-        {post.authorId === user?.id && (
+        {post?.authorId === user?.id && (
           <>
             <DeletePostModal
               show={showDeleteModal}
@@ -75,7 +87,7 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
               }}
             />
             <ThreeDots
-              onClick={() => {
+              onClick={(event) => {
                 setShowDeleteModal(!showDeleteModal);
               }}
             />
@@ -93,7 +105,7 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
       <StyledReactionsContainer>
         <Reaction
           img={IconType.CHAT}
-          count={actualPost.qtyComments}
+          count={actualPost?.comments?.length ?? 0}
           reactionFunction={() =>
             window.innerWidth > 600
               ? setShowCommentModal(true)
@@ -104,17 +116,17 @@ const Tweet = forwardRef<HTMLDivElement, TweetProps>(({ post }, ref) => {
         />
         <Reaction
           img={IconType.RETWEET}
-          count={actualPost.qtyRetweets}
-          reactionFunction={() => handleReaction("RETWEET")}
+          count={actualPost?.retweets?.length ?? 0}
+          reactionFunction={() => handleRetweet()}
           increment={1}
-          reacted={hasReactedByType("RETWEET")}
+          reacted={hasRetweeted()}
         />
         <Reaction
           img={IconType.LIKE}
-          count={actualPost.qtyLikes}
-          reactionFunction={() => handleReaction("LIKE")}
+          count={actualPost?.likes?.length ?? 0}
+          reactionFunction={() => handleLike()}
           increment={1}
-          reacted={hasReactedByType("LIKE")}
+          reacted={hasLiked()}
         />
       </StyledReactionsContainer>
       <CommentModal

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { DeleteIcon } from "../../icon/Icon";
 import Modal from "../../modal/Modal";
 import Button from "../../button/Button";
@@ -11,6 +11,7 @@ import { Post } from "../../../service";
 import { StyledDeletePostModalContainer } from "./DeletePostModalContainer";
 import { useToast } from "../../toast/ToastContext";
 import { ToastType } from "../../toast/Toast";
+import ClickOutsideModal from "../../modal/ClickOutsideModal";
 
 interface DeletePostModalProps {
   show: boolean;
@@ -24,57 +25,62 @@ export const DeletePostModal = ({
   onClose,
 }: DeletePostModalProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showPrompt, setShowPrompt] = useState<boolean>(show);
   const feed = useAppSelector((state) => state.user.feed);
   const dispatch = useAppDispatch();
   const { deletePost } = useHttpRequestService();
   const { t } = useTranslation();
   const { showToast } = useToast();
 
-  const handleDelete = () => {
+  useEffect(() => {
+    setShowPrompt(show);
+  }, [show]);
+
+  const handleDelete = async () => {
     try {
       showToast(ToastType.SUCCESS, t("toast.post.delete.success"));
-      deletePost(id).then((res) => console.log(res));
+      await deletePost(id);
       const newFeed = feed.filter((post: Post) => post.id !== id);
       dispatch(updateFeed(newFeed));
       handleClose();
     } catch (error) {
       showToast(ToastType.ALERT, t("toast.post.delete.error"));
-      console.log(error);
     }
   };
 
   const handleClose = () => {
     setShowModal(false);
+    setShowPrompt(false);
     onClose();
   };
 
   return (
-    <>
-      {show && (
-        <>
-          <StyledDeletePostModalContainer onClick={() => setShowModal(true)}>
-            <DeleteIcon />
-            <p>{t("buttons.delete")}</p>
-          </StyledDeletePostModalContainer>
-          <Modal
-            title={t("modal-title.delete-post") + "?"}
-            text={t("modal-content.delete-post")}
-            show={showModal}
-            onClose={handleClose}
-            acceptButton={
-              <Button
-                buttonType={ButtonType.FULFILLED}
-                buttonColor={ButtonColor.DELETE}
-                size={ButtonSize.MEDIUM}
-                onClick={handleDelete}
-              >
-                {t("buttons.delete")}
-              </Button>
-            }
-          />
-        </>
-      )}
-    </>
+    <ClickOutsideModal
+      show={showPrompt}
+      onClose={handleClose}
+      active={!showModal}
+    >
+      <StyledDeletePostModalContainer onClick={() => setShowModal(true)}>
+        <DeleteIcon />
+        <p>{t("buttons.delete")}</p>
+      </StyledDeletePostModalContainer>
+      <Modal
+        title={t("modal-title.delete-post") + "?"}
+        text={t("modal-content.delete-post")}
+        show={showModal}
+        onClose={handleClose}
+        acceptButton={
+          <Button
+            buttonType={ButtonType.FULFILLED}
+            buttonColor={ButtonColor.DELETE}
+            size={ButtonSize.MEDIUM}
+            onClick={handleDelete}
+          >
+            {t("buttons.delete")}
+          </Button>
+        }
+      />
+    </ClickOutsideModal>
   );
 };
 

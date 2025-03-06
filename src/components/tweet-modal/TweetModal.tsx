@@ -1,4 +1,4 @@
-import React from "react";
+import ReactDOM from "react-dom";
 import TweetBox from "../tweet-box/TweetBox";
 import { PostModal } from "../post-modal/PostModal";
 
@@ -8,12 +8,13 @@ interface TweetModalProps {
 }
 
 export const TweetModal = ({ open, onClose }: TweetModalProps) => {
-  return (
+  return ReactDOM.createPortal(
     <>
       <PostModal show={open} onClose={onClose}>
         <TweetBox borderless close={onClose} />
       </PostModal>
-    </>
+    </>,
+    document.getElementById("portal") as HTMLElement
   );
 };
 export default TweetModal;

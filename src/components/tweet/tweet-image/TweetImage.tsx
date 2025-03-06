@@ -28,6 +28,7 @@ const TweetImage = ({
         maxWidth={"100%"}
         borderRadius={"16px"}
         alignItems={"flex-end"}
+        data-testid="tweet-image"
       >
         {removable && (
           <StyledRemoveIconContainer>

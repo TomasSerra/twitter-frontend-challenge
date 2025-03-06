@@ -12,20 +12,25 @@ import { StyledP } from "../../common/text";
 import { User } from "../../../service";
 import { useToast } from "../../toast/ToastContext";
 import { ToastType } from "../../toast/Toast";
+import ClickOutsideModal from "../../modal/ClickOutsideModal";
+import { StyledLogoutPrompt } from "../../profile-logout/StyledProfileLogoutPromptContainer";
 
 interface LogoutPromptProps {
   show: boolean;
+  onClose: () => void;
   user: User;
+  margin: string;
 }
 
-const LogoutPrompt = ({ show, user }: LogoutPromptProps) => {
+const LogoutPrompt = ({ show, onClose, user, margin }: LogoutPromptProps) => {
   const [showPrompt, setShowPrompt] = useState<boolean>(show);
   const [showModal, setShowModal] = useState<boolean>(false);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const { showToast } = useToast();
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
     setShowModal(true);
   };
 
@@ -39,7 +44,8 @@ const LogoutPrompt = ({ show, user }: LogoutPromptProps) => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     showToast(ToastType.SUCCESS, t("toast.logout"));
     localStorage.removeItem("token");
     navigate("/sign-in");
@@ -49,9 +55,22 @@ const LogoutPrompt = ({ show, user }: LogoutPromptProps) => {
     setShowPrompt(show);
   }, [show]);
 
+  const handleClose = () => {
+    setShowPrompt(false);
+    setShowModal(false);
+    onClose();
+  };
+
   return (
-    <>
-      {showPrompt && (
+    <ClickOutsideModal
+      show={showPrompt}
+      active={!showModal}
+      onClose={handleClose}
+    >
+      <StyledLogoutPrompt
+        margin={margin}
+        onMouseDown={(event) => event.stopPropagation()}
+      >
         <StyledPromptContainer>
           <StyledContainer
             flexDirection={"row"}
@@ -67,7 +86,9 @@ const LogoutPrompt = ({ show, user }: LogoutPromptProps) => {
             />
           </StyledContainer>
           <StyledContainer
-            onClick={handleClick}
+            onMouseDown={(event) => {
+              handleClick(event);
+            }}
             alignItems={"center"}
             style={{ cursor: "pointer" }}
           >
@@ -76,25 +97,27 @@ const LogoutPrompt = ({ show, user }: LogoutPromptProps) => {
             }`}</StyledP>
           </StyledContainer>
         </StyledPromptContainer>
-      )}
-      <Modal
-        show={showModal}
-        text={t("modal-content.logout")}
-        img={logo}
-        title={t("modal-title.logout")}
-        acceptButton={
-          <Button
-            buttonType={ButtonType.FULFILLED}
-            buttonColor={ButtonColor.DELETE}
-            size={ButtonSize.MEDIUM}
-            onClick={handleLogout}
-          >
-            {t("buttons.logout")}
-          </Button>
-        }
-        onClose={() => setShowModal(false)}
-      />
-    </>
+        <Modal
+          show={showModal}
+          text={t("modal-content.logout")}
+          img={logo}
+          title={t("modal-title.logout")}
+          acceptButton={
+            <Button
+              buttonType={ButtonType.FULFILLED}
+              buttonColor={ButtonColor.DELETE}
+              size={ButtonSize.MEDIUM}
+              onClick={(event) => {
+                handleLogout(event);
+              }}
+            >
+              {t("buttons.logout")}
+            </Button>
+          }
+          onClose={handleClose}
+        />
+      </StyledLogoutPrompt>
+    </ClickOutsideModal>
   );
 };
 

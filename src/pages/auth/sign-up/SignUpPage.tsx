@@ -29,7 +29,6 @@ const SignUpPage = () => {
     signUp(data)
       .then(async () => {
         await queryClient.invalidateQueries({ queryKey: ["me"] });
-        await queryClient.refetchQueries({ queryKey: ["me"] });
         navigate("/sign-in");
       })
       .catch(() => {});

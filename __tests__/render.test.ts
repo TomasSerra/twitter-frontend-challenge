@@ -1,8 +1,7 @@
-import {describe} from "node:test";
+import { describe } from "node:test";
 
-describe('Jest works', () => {
-
-    test('asserts true to be true', () => {
-        expect(true).toBe(true)
-    })
-})
+describe("Jest works", () => {
+  test("asserts true to be true", () => {
+    expect(true).toBe(true);
+  });
+});

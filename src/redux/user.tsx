@@ -12,7 +12,7 @@ type InitalStateType = {
 const initialState: InitalStateType = {
   feed: [],
   length: LIMIT,
-  query: "?limit=6&skip=0",
+  query: `?skip=0&limit=${LIMIT}`,
 };
 
 const userSlice = createSlice({

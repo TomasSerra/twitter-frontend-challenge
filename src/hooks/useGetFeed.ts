@@ -2,49 +2,59 @@ import { useEffect, useState } from "react";
 import useHttpRequestService from "../service/useHttpRequestService";
 import { setLength, updateFeed } from "../redux/user";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { LIMIT } from "../util/Constants";
 
-export const useGetFeed = () => {
+export const useGetFeed = (activePage: boolean) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const posts = useAppSelector((state) => state.user.feed) || [];
+  let posts = useAppSelector((state) => state.user.feed) || [];
   const query = useAppSelector((state) => state.user.query);
 
   const dispatch = useAppDispatch();
-  const { getPosts } = useHttpRequestService();
+  const { getPosts, getFollowedPosts } = useHttpRequestService();
 
   useEffect(() => {
-    setPage(1);
+    setPage(0);
     dispatch(updateFeed([]));
-  }, [query]);
+  }, []);
 
   useEffect(() => {
     if (!hasMore) return;
-
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(false);
-        const query = `?skip=${page * 6}&limit=6`;
-        const res = await getPosts(query);
-        const safeRes = Array.isArray(res) ? res : [];
-        console.log(safeRes);
-
-        dispatch(updateFeed([...posts, ...safeRes]));
-        dispatch(setLength(posts.length + safeRes.length));
-
-        setHasMore(safeRes.length > 0);
-        setLoading(false);
-      } catch (e) {
-        setError(true);
-        console.log(e);
-      }
-    };
-
-    fetchData();
+    fetchData(page);
   }, [page, query]);
+
+  useEffect(() => {
+    dispatch(setLength(0));
+    dispatch(updateFeed([]));
+    posts = [];
+    setPage(0);
+    fetchData(0);
+    setHasMore(true);
+  }, [activePage]);
+
+  const fetchData = async (page: number) => {
+    try {
+      setLoading(true);
+      setError(false);
+      const query = `?skip=${posts.length}&limit=${LIMIT}`;
+      const res = activePage
+        ? await getPosts(query)
+        : await getFollowedPosts(query);
+      const safeRes = Array.isArray(res) ? res : [];
+
+      dispatch(updateFeed([...posts, ...safeRes]));
+      dispatch(setLength(posts.length + safeRes.length));
+
+      setHasMore(safeRes.length === LIMIT);
+      setLoading(false);
+    } catch (error) {
+      setError(true);
+      console.log(error);
+    }
+  };
 
   return { posts, loading, error, setPage, hasMore };
 };

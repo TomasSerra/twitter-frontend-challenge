@@ -91,13 +91,16 @@ const useHttpRequestService = () => {
         content: data.content,
         images: data.images?.map((image) => image.name),
       };
-      const res = await axiosInstance.post(`${url}/post`, uploadData);
+      const res = await axiosInstance.post(
+        `${url}/post?parentId=${data.parentId || ""}`,
+        uploadData
+      );
       if (res.status === 201) {
         const { upload } = S3Service;
-        for (const imageUrl of res.data.images) {
-          const index: number = res.data.images.indexOf(imageUrl);
-          console.log(imageUrl);
-          await upload(data.images![index], imageUrl);
+        let i = 0;
+        for (const imageUrl of res.data.imageUploadUrls) {
+          await upload(data.images![i], imageUrl);
+          i++;
         }
         return res.data;
       }
@@ -108,18 +111,9 @@ const useHttpRequestService = () => {
     }
   };
 
-  const getPaginatedPosts = async (
-    limit: number,
-    after: string,
-    query: string
-  ) => {
+  const getChats = async (userId: string) => {
     try {
-      const res = await axiosInstance.get(`${url}/post/${query}`, {
-        params: {
-          limit,
-          after,
-        },
-      });
+      const res = await axiosInstance.get(`${url}/chat/${userId}`);
       if (res.status === 200) {
         return res.data;
       }
@@ -128,9 +122,9 @@ const useHttpRequestService = () => {
     }
   };
 
-  const getPosts = async (query: string) => {
+  const getPosts = async (query: string = "") => {
     try {
-      const res = await axiosInstance.get(`${url}/post/${query}`);
+      const res = await axiosInstance.get(`${url}/post${query}`);
       if (res.status === 200) {
         return res.data;
       }
@@ -158,7 +152,7 @@ const useHttpRequestService = () => {
   const me = async () => {
     const res = await axiosInstance.get(`${url}/user/me`);
     if (res.status === 200) {
-      return res.data.user;
+      return res.data;
     }
   };
 
@@ -169,22 +163,39 @@ const useHttpRequestService = () => {
     }
   };
 
-  const createReaction = async (postId: string, reaction: string) => {
-    const res = await axiosInstance.post(`${url}/reaction/${postId}`, {
-      action: reaction,
-    });
+  const likePost = async (postId: string) => {
+    const res = await axiosInstance.post(`${url}/reaction/like/${postId}`);
     if (res.status === 201) {
       return res.data;
     }
   };
 
-  const deleteReaction = async (reactionId: string, reaction: string) => {
-    const res = await axiosInstance.delete(`${url}/reaction/${reactionId}`, {
-      data: {
-        action: reaction,
-      },
-    });
+  const unlikePost = async (postId: string) => {
+    const res = await axiosInstance.delete(`${url}/reaction/like/${postId}`);
     if (res.status === 200) {
+      return res.data;
+    }
+  };
+
+  const retweetPost = async (postId: string) => {
+    const res = await axiosInstance.post(`${url}/reaction/retweet/${postId}`);
+    if (res.status === 201) {
+      return res.data;
+    }
+  };
+
+  const deleteRetweetPost = async (postId: string) => {
+    const res = await axiosInstance.delete(`${url}/reaction/retweet/${postId}`);
+    if (res.status === 200) {
+      return res.data;
+    }
+  };
+
+  const commentPost = async (postId: string, content: string) => {
+    const res = await axiosInstance.post(`${url}/comment/${postId}`, {
+      content,
+    });
+    if (res.status === 201) {
       return res.data;
     }
   };
@@ -197,7 +208,9 @@ const useHttpRequestService = () => {
   };
 
   const unfollowUser = async (userId: string) => {
-    const res = await axiosInstance.post(`${url}/follower/unfollow/${userId}`);
+    const res = await axiosInstance.delete(
+      `${url}/follower/unfollow/${userId}`
+    );
     if (res.status === 200) {
       return res.data;
     }
@@ -223,36 +236,15 @@ const useHttpRequestService = () => {
   };
 
   const getProfile = async (id: string) => {
-    const res = await axiosInstance.get(`${url}/user/${id}`);
+    const res = await axiosInstance.get(`${url}/user/profile/${id}`);
     if (res.status === 200) {
       return res.data;
     }
   };
 
-  const getPaginatedPostsFromProfile = async (
-    limit: number,
-    after: string,
-    id: string
-  ) => {
+  const getPostsFromProfile = async (id: string, query: string = "") => {
     try {
-      const res = await axiosInstance.get(`${url}/post/by_user/${id}`, {
-        params: {
-          limit,
-          after,
-        },
-      });
-
-      if (res.status === 200) {
-        return res.data;
-      }
-    } catch (e) {
-      handleNotFound(e);
-    }
-  };
-
-  const getPostsFromProfile = async (id: string) => {
-    try {
-      const res = await axiosInstance.get(`${url}/post/by_user/${id}`);
+      const res = await axiosInstance.get(`${url}/post/by_user/${id}${query}`);
 
       if (res.status === 200) {
         return res.data;
@@ -272,30 +264,30 @@ const useHttpRequestService = () => {
   };
 
   const getProfileView = async (id: string) => {
-    const res = await axiosInstance.get(`${url}/user/${id}`);
-
+    const res = await axiosInstance.get(`${url}/user/profile/${id}`);
     if (res.status === 200) {
       return res.data;
     }
   };
 
-  const deleteProfile = async () => {
-    const res = await axiosInstance.delete(`${url}/user/me`);
-
-    if (res.status === 204) {
-      localStorage.removeItem("token");
-    }
-  };
-
-  const getChats = async () => {
+  const getFollowedPosts = async (query?: string) => {
     try {
-      const res = await axiosInstance.get(`${url}/chat`);
-
+      const res = await axiosInstance.get(
+        `${url}/post/following${query || ""}`
+      );
       if (res.status === 200) {
         return res.data;
       }
     } catch (e) {
       handleNotFound(e);
+    }
+  };
+
+  const deleteProfile = async () => {
+    const res = await axiosInstance.delete(`${url}/user`);
+
+    if (res.status === 204) {
+      localStorage.removeItem("token");
     }
   };
 
@@ -313,14 +305,6 @@ const useHttpRequestService = () => {
     });
 
     if (res.status === 201) {
-      return res.data;
-    }
-  };
-
-  const getChat = async (id: string) => {
-    const res = await axiosInstance.get(`${url}/chat/${id}`);
-
-    if (res.status === 200) {
       return res.data;
     }
   };
@@ -349,9 +333,9 @@ const useHttpRequestService = () => {
     }
   };
 
-  const getCommentsByPostId = async (id: string) => {
+  const getCommentsByPostId = async (id: string, query: string = "") => {
     try {
-      const res = await axiosInstance.get(`${url}/post/comment/by_post/${id}`);
+      const res = await axiosInstance.get(`${url}/comment/${id}${query}`);
       if (res.status === 200) {
         return res.data;
       }
@@ -364,18 +348,19 @@ const useHttpRequestService = () => {
     signUp,
     signIn,
     createPost,
-    getPaginatedPosts,
     getPosts,
     getRecommendedUsers,
     me,
     getPostById,
-    createReaction,
-    deleteReaction,
+    likePost,
+    unlikePost,
+    retweetPost,
+    deleteRetweetPost,
     followUser,
     unfollowUser,
     searchUsers,
     getProfile,
-    getPaginatedPostsFromProfile,
+    getFollowedPosts,
     getPostsFromProfile,
     isLogged,
     getProfileView,
@@ -383,10 +368,10 @@ const useHttpRequestService = () => {
     getChats,
     getMutualFollows,
     createChat,
-    getChat,
     deletePost,
     getPaginatedCommentsByPostId,
     getCommentsByPostId,
+    commentPost,
     loading,
     error,
   };

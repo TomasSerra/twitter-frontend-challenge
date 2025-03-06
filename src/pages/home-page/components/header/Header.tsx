@@ -3,7 +3,12 @@ import logo from "../../../../assets/logo.png";
 import { StyledHeaderContainer } from "./HeaderContainer";
 import ProfileLogoutPrompt from "../../../../components/profile-logout/ProfileLogoutPrompt";
 
-const Header = () => {
+interface HeaderProps {
+  activePage: boolean;
+  setActivePage: (value: boolean) => void;
+}
+
+const Header = ({ activePage, setActivePage }: HeaderProps) => {
   return (
     <>
       <StyledHeaderContainer>
@@ -11,7 +16,7 @@ const Header = () => {
         <div className="title-container" style={{ position: "relative" }}>
           <img src={logo} className="logo" alt="Logo" />
         </div>
-        <TabBar />
+        <TabBar activePage={activePage} setActivePage={setActivePage} />
       </StyledHeaderContainer>
     </>
   );

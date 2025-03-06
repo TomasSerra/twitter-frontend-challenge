@@ -2,7 +2,11 @@ import React from "react";
 import { StyledContainer } from "./Container";
 import { StyledDot } from "./Dot";
 
-const ThreeDots = ({ onClick }: { onClick: () => void }) => {
+const ThreeDots = ({
+  onClick,
+}: {
+  onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+}) => {
   return (
     <StyledContainer
       flexDirection={"row"}
@@ -15,7 +19,7 @@ const ThreeDots = ({ onClick }: { onClick: () => void }) => {
       borderRadius={"50%"}
       hoverable
       marginRight={window.innerWidth < 700 ? 10 : 0}
-      onClick={onClick}
+      onMouseDown={onClick}
       cursor={"pointer"}
     >
       <StyledDot />

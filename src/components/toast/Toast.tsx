@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import { StyledToastContainer } from "./ToastContainer";
 import { AlertIcon } from "../icon/Icon";
-import { LightTheme } from "../../util/LightTheme";
 
 export enum ToastType {
   ALERT = "ALERT",
@@ -41,21 +41,23 @@ const Toast = ({
   const iconMap = {
     [ToastType.ALERT]: <AlertIcon />,
     [ToastType.SUCCESS]: null,
-    [ToastType.WARNING]: null,
+    [ToastType.WARNING]: <AlertIcon />,
     [ToastType.INFO]: null,
   };
 
-  return isShown ? (
-    <StyledToastContainer
-      type={type}
-      onClick={handleClose}
-      position={position}
-      theme={LightTheme}
-    >
-      {iconMap[type] || null}
-      <p>{message}</p>
-    </StyledToastContainer>
-  ) : null;
+  return ReactDOM.createPortal(
+    isShown ? (
+      <StyledToastContainer
+        type={type}
+        onClick={handleClose}
+        position={position}
+      >
+        {iconMap[type] || null}
+        <p>{message}</p>
+      </StyledToastContainer>
+    ) : null,
+    document.getElementById("portal") as HTMLElement
+  );
 };
 
 export default Toast;

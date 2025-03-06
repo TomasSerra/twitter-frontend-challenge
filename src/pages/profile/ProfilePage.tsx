@@ -16,9 +16,10 @@ import { StyledContainer } from "../../components/common/Container";
 import { StyledH5 } from "../../components/common/text";
 import { useMe } from "../../hooks/useMe";
 
+//TODO: Refactor action button
+
 const ProfilePage = () => {
   const [profile, setProfile] = useState<User | null>(null);
-  const [following, setFollowing] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalValues, setModalValues] = useState({
     text: "",
@@ -45,7 +46,7 @@ const ProfilePage = () => {
         component: { type: ButtonType.FULFILLED, color: ButtonColor.DELETE },
         text: t("buttons.delete"),
       };
-    if (following)
+    if (profile?.isFollowing)
       return {
         component: { type: ButtonType.OUTLINED, color: ButtonColor.DELETE },
         text: t("buttons.unfollow"),
@@ -65,11 +66,14 @@ const ProfilePage = () => {
       });
     } else {
       unfollowUser(profile!.id).then(async () => {
-        setFollowing(false);
         setShowModal(false);
         await getProfileData();
       });
     }
+  };
+
+  const handleChat = () => {
+    navigate(`/chat/${profile?.id}`);
   };
 
   useEffect(() => {
@@ -89,7 +93,7 @@ const ProfilePage = () => {
         buttonColor: ButtonColor.DELETE,
       });
     } else {
-      if (following) {
+      if (profile?.isFollowing) {
         setShowModal(true);
         setModalValues({
           text: t("modal-content.unfollow"),
@@ -109,8 +113,7 @@ const ProfilePage = () => {
   const getProfileData = async () => {
     getProfileView(id)
       .then((res) => {
-        setProfile({ ...res.user, private: !res.isPublic });
-        setFollowing(res.isFollowing);
+        setProfile(res);
       })
       .catch(() => {});
   };
@@ -136,22 +139,44 @@ const ProfilePage = () => {
                 flexDirection={"row"}
               >
                 <ProfileInfo
-                  name={profile!.name!}
-                  username={profile!.username}
-                  profilePicture={profile!.profilePicture}
+                  name={profile?.name}
+                  username={profile?.username}
+                  profilePicture={profile?.profilePicture}
                 />
-                <Button
-                  buttonType={handleButtonType().component.type}
-                  buttonColor={handleButtonType().component.color}
-                  size={ButtonSize.MEDIUM}
-                  onClick={handleButtonAction}
+                <StyledContainer
+                  display="flex"
+                  flexDirection="column"
+                  alignItems={"center"}
+                  justifyContent={"flex-start"}
+                  width={"fit-content"}
                 >
-                  {handleButtonType().text}
-                </Button>
+                  <Button
+                    buttonType={handleButtonType().component.type}
+                    buttonColor={handleButtonType().component.color}
+                    size={ButtonSize.MEDIUM}
+                    onClick={handleButtonAction}
+                  >
+                    {handleButtonType().text}
+                  </Button>
+                  {profile?.isFollowing &&
+                    profile.isFollowed &&
+                    profile?.id !== me?.id && (
+                      <Button
+                        buttonType={ButtonType.OUTLINED}
+                        buttonColor={ButtonColor.WHITE}
+                        size={ButtonSize.MEDIUM}
+                        onClick={handleChat}
+                      >
+                        Chat
+                      </Button>
+                    )}
+                </StyledContainer>
               </StyledContainer>
             </StyledContainer>
             <StyledContainer width={"100%"}>
-              {!profile.private ? (
+              {!profile?.private ||
+              profile?.id === me?.id ||
+              profile?.isFollowing ? (
                 <ProfileFeed />
               ) : (
                 <StyledH5>Private account</StyledH5>

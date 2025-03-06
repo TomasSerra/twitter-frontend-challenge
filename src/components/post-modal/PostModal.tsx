@@ -1,4 +1,5 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
+import ReactDOM from "react-dom";
 import { StyledBlurredBackground } from "../common/BlurredBackground";
 import { ModalCloseButton } from "../common/ModalCloseButton";
 import { StyledTweetModalContainer } from "../tweet-modal/TweetModalContainer";
@@ -10,7 +11,7 @@ interface PostModalProps {
 }
 
 export const PostModal = ({ onClose, show, children }: PostModalProps) => {
-  return (
+  return ReactDOM.createPortal(
     <>
       {show && (
         <StyledBlurredBackground onClick={onClose}>
@@ -20,6 +21,7 @@ export const PostModal = ({ onClose, show, children }: PostModalProps) => {
           </StyledTweetModalContainer>
         </StyledBlurredBackground>
       )}
-    </>
+    </>,
+    document.getElementById("portal") as HTMLElement
   );
 };
