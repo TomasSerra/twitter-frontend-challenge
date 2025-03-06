@@ -174,7 +174,7 @@ const ProfilePage = () => {
               </StyledContainer>
             </StyledContainer>
             <StyledContainer width={"100%"}>
-              {profile?.private ||
+              {!profile?.private ||
               profile?.id === me?.id ||
               profile?.isFollowing ? (
                 <ProfileFeed />

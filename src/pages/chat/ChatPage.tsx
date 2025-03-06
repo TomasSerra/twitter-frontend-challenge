@@ -15,7 +15,6 @@ const ChatPage = () => {
   const { getProfileView } = useHttpRequestService();
   const { data: me } = useMe();
   const [toUserData, setToUserData] = useState<User>();
-  const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const chatSocket = useChat();
 
   useEffect(() => {
@@ -30,14 +29,13 @@ const ChatPage = () => {
 
   useEffect(() => {
     getProfileView(toUserId).then((res) => {
-      setToUserData(res.user);
-      setIsFollowing(res.isFollowing);
+      setToUserData(res);
     });
   }, [toUserId]);
 
   return (
     <StyledChatPageContainer>
-      <Header toUserData={toUserData} isFollowing={isFollowing} />
+      <Header toUserData={toUserData} />
       <StyledContainer
         height="100%"
         width="100%"

@@ -7,10 +7,9 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 interface HeaderProps {
   toUserData?: User;
-  isFollowing: boolean;
 }
 
-const Header = ({ toUserData, isFollowing }: HeaderProps) => {
+const Header = ({ toUserData }: HeaderProps) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
