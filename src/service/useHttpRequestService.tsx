@@ -236,7 +236,7 @@ const useHttpRequestService = () => {
   };
 
   const getProfile = async (id: string) => {
-    const res = await axiosInstance.get(`${url}/user/byUserId/${id}`);
+    const res = await axiosInstance.get(`${url}/user/profile/${id}`);
     if (res.status === 200) {
       return res.data;
     }
@@ -264,7 +264,7 @@ const useHttpRequestService = () => {
   };
 
   const getProfileView = async (id: string) => {
-    const res = await axiosInstance.get(`${url}/user/byUserId/${id}`);
+    const res = await axiosInstance.get(`${url}/user/profile/${id}`);
     if (res.status === 200) {
       return res.data;
     }

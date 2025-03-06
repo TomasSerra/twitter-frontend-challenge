@@ -57,6 +57,8 @@ export interface User {
   followers: Author[];
   following: Author[];
   posts: Post[];
+  isFollowing: boolean;
+  isFollowed: boolean;
 }
 
 export interface MessageDTO {
