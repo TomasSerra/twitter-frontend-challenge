@@ -1,13 +1,19 @@
 import { useCallback } from "react";
 import socket from "../service/socketService";
 import { Socket } from "socket.io-client";
+import useHttpRequestService from "../service/useHttpRequestService";
+import { ChatType } from "../pages/chat/components/chats/ChatList";
 
 export interface ChatSocket {
   sendMessage: (message: string, toUserId: string) => void;
   onMessage: (
-    callback: (msg: string, createdAt: string, senderId: string) => void
+    callback: (data: {
+      msg: string;
+      createdAt: string;
+      senderId: string;
+    }) => void
   ) => void;
-  getAllMessages: (toUserId: string) => void;
+  getAllMessages: (toUserId: string) => Promise<ChatType[]>;
   connect: () => void;
   disconnect: () => void;
   joinRoom: (toUserId: string) => void;
@@ -18,20 +24,27 @@ export interface ChatSocket {
 const useChat = (): ChatSocket => {
   const token = localStorage.getItem("token")?.split(" ")[1] || "";
   const chatSocket: Socket = socket({ token });
+  const { getChats } = useHttpRequestService();
 
   const sendMessage = useCallback(
     (msg: string, receiverId: string) => {
       if (chatSocket) {
-        chatSocket.emit("chat message", { msg, receiverId });
+        chatSocket.emit("send message", { msg, receiverId });
       }
     },
     [chatSocket]
   );
 
   const onMessage = useCallback(
-    (callback: (msg: string, createdAt: string, senderId: string) => void) => {
+    (
+      callback: (data: {
+        msg: string;
+        createdAt: string;
+        senderId: string;
+      }) => void
+    ) => {
       if (chatSocket) {
-        chatSocket.on("chat message", callback);
+        chatSocket.on("get message", callback);
       }
     },
     [chatSocket]
@@ -49,14 +62,10 @@ const useChat = (): ChatSocket => {
     }
   }, [chatSocket]);
 
-  const getAllMessages = useCallback(
-    (receiverId: string) => {
-      if (chatSocket) {
-        chatSocket.emit("bring room", { receiverId });
-      }
-    },
-    [chatSocket]
-  );
+  const getAllMessages = useCallback(async (receiverId: string) => {
+    const res: ChatType[] = await getChats(receiverId);
+    return res;
+  }, []);
 
   const joinRoom = useCallback(
     (receiverId: string) => {
@@ -78,7 +87,8 @@ const useChat = (): ChatSocket => {
 
   const off = useCallback(() => {
     if (chatSocket) {
-      chatSocket.off("chat message");
+      chatSocket.off("send message");
+      chatSocket.off("get message");
     }
   }, [chatSocket]);
 

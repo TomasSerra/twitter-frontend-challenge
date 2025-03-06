@@ -111,6 +111,17 @@ const useHttpRequestService = () => {
     }
   };
 
+  const getChats = async (userId: string) => {
+    try {
+      const res = await axiosInstance.get(`${url}/chat/${userId}`);
+      if (res.status === 200) {
+        return res.data;
+      }
+    } catch (e) {
+      handleNotFound(e);
+    }
+  };
+
   const getPosts = async (query: string = "") => {
     try {
       const res = await axiosInstance.get(`${url}/post${query}`);
@@ -280,18 +291,6 @@ const useHttpRequestService = () => {
     }
   };
 
-  const getChats = async () => {
-    try {
-      const res = await axiosInstance.get(`${url}/chat`);
-
-      if (res.status === 200) {
-        return res.data;
-      }
-    } catch (e) {
-      handleNotFound(e);
-    }
-  };
-
   const getMutualFollows = async () => {
     const res = await axiosInstance.get(`${url}/follow/mutual`);
 
@@ -306,14 +305,6 @@ const useHttpRequestService = () => {
     });
 
     if (res.status === 201) {
-      return res.data;
-    }
-  };
-
-  const getChat = async (id: string) => {
-    const res = await axiosInstance.get(`${url}/chat/${id}`);
-
-    if (res.status === 200) {
       return res.data;
     }
   };
@@ -377,7 +368,6 @@ const useHttpRequestService = () => {
     getChats,
     getMutualFollows,
     createChat,
-    getChat,
     deletePost,
     getPaginatedCommentsByPostId,
     getCommentsByPostId,

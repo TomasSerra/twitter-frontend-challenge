@@ -4,7 +4,7 @@ import { User } from "../../../../service";
 import { StyledContainer } from "../../../../components/common/Container";
 import { ChatSocket } from "../../../../hooks/useChat";
 
-type ChatType = {
+export type ChatType = {
   senderId: string;
   content: string;
   createdAt: string;
@@ -22,12 +22,16 @@ const ChatList = ({ toUserData, meData, socket }: ChatListProps) => {
 
   useEffect(() => {
     socket.joinRoom(toUserData.id);
-    socket.getAllMessages(toUserData.id);
-    const handleMessage = (
-      msg: string,
-      createdAt: string,
-      senderId: string
-    ) => {
+
+    const handleMessage = ({
+      msg,
+      createdAt,
+      senderId,
+    }: {
+      msg: string;
+      createdAt: string;
+      senderId: string;
+    }) => {
       setChats((prevChats) => [
         ...prevChats,
         { senderId, content: msg, createdAt },
@@ -35,6 +39,10 @@ const ChatList = ({ toUserData, meData, socket }: ChatListProps) => {
     };
 
     socket.onMessage(handleMessage);
+
+    socket.getAllMessages(toUserData.id).then((chats) => {
+      setChats((prevChats) => [...prevChats, ...chats]);
+    });
 
     return () => {
       socket.off();
